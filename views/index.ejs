@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="./assets/favicon.ico">
+    <title>plant with us - made for earth</title>
+    <link rel="stylesheet" href="./styles/style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Quicksand:wght@300..700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <section id="header">
+      <a href="/"><img src="./assets/plantwithus.png" alt="logo plant with us" /></a>
+      <div>
+        <ul id="navbar">
+          <li><a class="active" href="/">explore</a></li>
+          <li><a href="/create">create</a></li>
+          <li><a href="/history">history</a></li>
+          <li><a href="/archive">archive</a></li>
+          <a href="#" id="close"><img src="./assets/x.png" alt="" /></a>
+        </ul>
+      </div>
+      <div id="mobile">
+        <i id="bar"><img src="./assets/list.png" alt="" /></i>
+      </div>
+    </section>
+
+    <div class="first-card">
+      <h2>made for earth</h2>
+      <p>explore our initiatives for reforestation, tree planting,</p>
+      <p>and river cleanups for a healthier and more sustainable planet</p>
+      <button><a href="/create">create event</a></button>
+    </div>
+
+    <div id="donationModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h3>donation settings</h3>
+        <div class="donation-content">
+          <div class="donation-content2">
+            <label>payment</label>
+            <select id="paymentMethod">
+              <option value="Bank Transfer">bank transfer</option>
+              <option value="e-Wallet">e-wallet</option>
+              <option value="Credit Card">credit card</option>
+            </select>
+            <label>idr</label>
+            <input
+              type="number"
+              id="donationAmount"
+              placeholder="Enter amount"
+              min="1"
+            />
+            <button onclick="confirmDonation()">Confirm Donation</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <% events.forEach(event => { %>
+    <div class="container-1" data-event-id="<%= event.id %>">
+      <div class="c11">
+        <img
+          src="/uploads/<%= event.thumbnail_photo %>"
+          alt="Event Thumbnail"
+          width="491"
+          height="493"
+        />
+      </div>
+      <div class="c12">
+        <h2><%= event.event_name %></h2>
+        <p><%= event.additional_notes %></p>
+
+        <!-- Progress Bar -->
+        <div class="progress-container">
+          <div
+            class="progress-bar"
+            style="
+              width: <%= (event.raised_money / event.target_money) * 100 %>%;
+            "
+          ></div>
+        </div>
+
+        <!-- Donation Status -->
+        <div class="donation-info">
+          <p>
+            Goal:
+            <span class="raised-amount"><%= event.raised_money || 0 %></span> /
+            <span class="goal-amount"><%= event.target_money %></span>
+          </p>
+        </div>
+
+        <!-- Donation Button -->
+        <div class="button-style-main">
+          <button onclick="openModal(<%= event.id %>)">Donate</button>
+          <button>
+            <a href="/download/<%= event.id %>">Proposal</a>
+          </button>
+        </div>
+      </div>
+    </div>
+    <% }) %>
+
+    <footer>
+      <a href="/"><img src="./assets/plantwithus.png" alt="logo plant with us" /></a>
+      <a href="/create">create</a>
+      <a href="/history">history</a>
+      <a href="/archive">archive</a>
+  </footer>
+
+    <div class="footer-plus">
+      <a href="">privacy policy</a>
+      <p>plant with us</p>
+    </div>
+
+    <!-- Move your script to the end of body -->
+    <script src="./js/script.js"></script>
+  </body>
+</html>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="./assets/favicon.ico">
+    <title>event - plant with us</title>
+    <link rel="stylesheet" href="./styles/style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Quicksand:wght@300..700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <section id="header">
+      <a href="/"><img src="./assets/plantwithus.png" alt="logo plant with us" /></a>
+
+      <div>
+        <ul id="navbar">
+          <li><a href="/">explore</a></li>
+          <li><a class="active" href="/create">create</a></li>
+          <li><a href="/history">history</a></li>
+          <li><a href="/archive">archive</a></li>
+          <a href="#" id="close"><img src="./assets/x.png" alt="" /></a>
+        </ul>
+      </div>
+
+      <div id="mobile">
+        <i id="bar"><img src="./assets/list.png" alt="" /></i>
+      </div>
+    </section>
+
+    <div class="header1">
+      <h2>create event</h2>
+      <p>create your event here!</p>
+    </div>
+
+    <form action="/create" method="POST" enctype="multipart/form-data">
+      <div class="form">
+        <div class="form-style">
+          <input type="text" name="eventname" placeholder="event name" required />
+          <input type="text" name="coordinatorname" placeholder="coordinator name" required />
+        </div>
+    
+        <div class="form-style">
+          <input type="email" name="email" placeholder="email" required />
+          <input type="number" name="targetmoney" placeholder="target money in rupiah" required />
+        </div>
+    
+        <div>
+          <div class="upload-file">
+            <label for="thumbnail" class="file-style">attach files</label>
+            <label for="thumbnail" class="label2">attach your thumbnail photo</label>
+            <input type="file" name="thumbnailphoto" id="thumbnail" accept="image/*" required />
+          </div>
+    
+          <div class="upload-file">
+            <label for="proposal" class="file-style">attach files</label>
+            <label for="proposal" class="label2">attach your proposal in pdf format</label>
+            <input type="file" name="file" id="proposal" accept="application/pdf" required />
+          </div>
+        </div>
+    
+        <div class="form-style-2">
+          <textarea name="additionalnotes" placeholder="additional notes"></textarea>
+        </div>
+    
+        <button type="submit">submit</button>
+      </div>
+    </form>
+    
+    
+    </div>
+
+    <footer>
+        <a href="/"><img src="./assets/plantwithus.png" alt="logo plant with us" /></a>
+        <a href="/create">create</a>
+        <a href="/history">history</a>
+        <a href="/archive">archive</a>
+    </footer>
+
+    <div class="footer-plus">
+        <a href="">privacy policy</a>
+        <p>plant with us</p>
+    </div>
+
+    <script src="./js/script.js"></script>
+  </body>
+</html>

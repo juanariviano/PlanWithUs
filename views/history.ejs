@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="./assets/favicon.ico">
+    <title>history - plant with us</title>
+    <link rel="stylesheet" href="./styles/style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Quicksand:wght@300..700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <section id="header">
+      <a href="/"><img src="./assets/plantwithus.png" alt="logo plant with us" /></a>
+
+      <div>
+        <ul id="navbar">
+          <li><a href="/">explore</a></li>
+          <li><a href="/create">create</a></li>
+          <li><a class="active" href="/history">history</a></li>
+          <li><a href="/archive">archive</a></li>
+          <a href="#" id="close"><img src="./assets/x.png" alt="" /></a>
+        </ul>
+      </div>
+
+      <div id="mobile">
+        <i id="bar"><img src="./assets/list.png" alt="" /></i>
+      </div>
+    </section>
+
+    <div class="title">
+      <h2>donation history</h2>
+    </div>
+
+    <% if (historyEvents && historyEvents.length > 0) { %>
+      <% historyEvents.forEach(event => { %>
+        <div class="history-content" data-event-id="<%= event.id %>">
+          <h2><%= event.event_name %></h2>
+          <% if (event.end_date) { %>
+            <p>Completed on <%= event.end_date %></p>
+          <% } else if (event.first_donation_date) { %>
+            <p>First donated on <%= event.first_donation_date %></p>
+          <% } %>
+          <p><%= event.additional_notes %></p>
+          <div class="donation-status">
+            <p>Raised: IDR <%= event.raised_money.toLocaleString() %> / <%= event.target_money.toLocaleString() %></p>
+          </div>
+          <!-- <% if (event.thumbnail_photo) { %>
+            <img src="/uploads/<%= event.thumbnail_photo %>" alt="Event Thumbnail" class="history-thumbnail">
+          <% } %> -->
+          <button onclick="window.location.href='/archive#event-<%= event.id %>'">check result</button>
+        </div>
+      <% }) %>
+    <% } else { %>
+      <div class="history-content empty-state">
+        <h2>no donation history yet</h2>
+        <p>your donation history will appear here once you make your first donation</p>
+        <!-- <button onclick="window.location.href='/'">Explore Events</button> -->
+      </div>
+    <% } %>
+    
+
+    <footer>
+      <a href="/"><img src="./assets/plantwithus.png" alt="logo plant with us" /></a>
+      <a href="/create">create</a>
+      <a href="/history">history</a>
+      <a href="/archive">archive</a>
+  </footer>
+
+    <div class="footer-plus">
+        <a href="">privacy policy</a>
+        <p>plant with us</p>
+    </div>
+
+    <script src="./js/script.js"></script>
+  </body>
+</html>
