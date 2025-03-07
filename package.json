@@ -1,17 +1,24 @@
 {
   "type": "module",
   "dependencies": {
+    "bcrypt": "^5.1.1",
+    "bcryptjs": "^3.0.2",
     "body-parser": "^1.20.3",
+    "cookie-parser": "^1.4.7",
     "ejs": "^3.1.10",
     "express": "^4.21.2",
+    "express-session": "^1.18.1",
+    "jsonwebtoken": "^9.0.2",
     "multer": "^1.4.5-lts.1",
+    "next": "^15.1.7",
     "nodemon": "^3.1.9",
     "path": "^0.12.7",
-    "pg": "^8.13.1",
+    "pg": "^8.13.3",
+    "pg-pool": "^3.7.1",
     "sharp": "^0.33.5",
     "url": "^0.11.4"
   },
   "scripts": {
-    "start" : "node index"
+    "start": "node index"
   }
 }

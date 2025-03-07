@@ -1,0 +1,92 @@
+body {
+  font-family: "Quicksand", sans-serif;
+  background-color: #F7EED3;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.auth-container {
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 400px;
+}
+
+h1 {
+  text-align: center;
+  color: #674636;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #674636;
+}
+
+input {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 5px;
+  background-color: #F7EED3;
+  font-size: 16px;
+  color: #674636;
+}
+
+input:focus {
+  outline: 2px solid #AAB396;
+}
+
+.btn-primary {
+  width: 100%;
+  padding: 12px;
+  background-color: #AAB396;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 10px;
+  transition: background 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: #8F9C7E;
+}
+
+p {
+  text-align: center;
+  margin-top: 20px;
+  color: #674636;
+}
+
+a {
+  color: #AAB396;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.error-message {
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 15px;
+  text-align: center;
+}

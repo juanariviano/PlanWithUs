@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="./assets/favicon.ico">
+    <title>login - planwithus</title>
+    <link rel="stylesheet" href="/styles/auth.css" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Quicksand:wght@300..700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background-color: #f7eed3;
+        font-family: "Quicksand", sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+
+      .login-container {
+        max-width: 450px;
+        margin: 100px auto;
+        padding: 30px;
+        /* background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2); */
+      }
+
+      .logo {
+        text-align: center;
+        margin-bottom: 30px;
+        color: #674636;
+        font-size: 24px;
+        font-weight: bold;
+      }
+
+      input {
+        width: 100%;
+        padding: 12px;
+        border: none;
+        border-radius: 5px;
+        background-color: #f7eed3;
+        font-size: 16px;
+        color: #674636;
+      }
+
+      input:focus {
+        outline: 2px solid #aab396;
+      }
+
+      .btn-primary {
+        background-color: #aab396;
+        border: none;
+        width: 100%;
+        padding: 12px;
+        border-radius: 5px;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+      }
+
+      .btn-primary:hover {
+        background-color: #8f9c7e;
+      }
+
+      .alert {
+        background-color: #f8d7da;
+        color: #721c24;
+        padding: 10px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+        text-align: center;
+      }
+
+      p {
+        text-align: center;
+        margin-top: 10px;
+        color: #674636;
+      }
+
+      a {
+        color: #aab396;
+        text-decoration: none;
+        font-weight: bold;
+      }
+
+      a:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="login-container">
+        <div class="logo">
+          <h3>planwithus</h3>
+          <p>sign in to continue</p>
+        </div>
+
+        <% if (error) { %>
+        <div class="alert alert-danger" role="alert"><%= error %></div>
+        <% } %>
+
+        <form action="/login" method="POST">
+          <div class="mb-3">
+            <label for="email" class="form-label">email</label>
+            <input
+              type="email"
+              class="form-control"
+              id="email"
+              name="email"
+              required
+            />
+          </div>
+          <div class="mb-3">
+            <label for="password" class="form-label">password</label>
+            <input
+              type="password"
+              class="form-control"
+              id="password"
+              name="password"
+              required
+            />
+          </div>
+          <button type="submit" class="btn btn-primary">login</button>
+        </form>
+
+        <div class="mt-4 text-center">
+          <p>don't have an account? <a href="/register">register now.</a></p>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" href="./assets/favicon.ico">
-    <title>history - plant with us</title>
+    <link rel="icon" href="./assets/favicon.ico" />
+    <title>history - plan with us</title>
     <link rel="stylesheet" href="./styles/style.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -15,67 +15,147 @@
   </head>
   <body>
     <section id="header">
-      <a href="/"><img src="./assets/plantwithus.png" alt="logo plant with us" /></a>
-
+      <a href="/"
+        ><img src="./assets/planwithus.png" alt="logo plan with us"
+      /></a>
       <div>
         <ul id="navbar">
           <li><a href="/">explore</a></li>
           <li><a href="/create">create</a></li>
           <li><a class="active" href="/history">history</a></li>
           <li><a href="/archive">archive</a></li>
+          <li class="profile-dropdown">
+            <a href="#" id="profileBtn">profile</a>
+            <div class="dropdown-content">
+              <a href="/profile">my profile</a>
+              <a href="/logout">logout</a>
+            </div>
+          </li>
           <a href="#" id="close"><img src="./assets/x.png" alt="" /></a>
         </ul>
       </div>
-
       <div id="mobile">
         <i id="bar"><img src="./assets/list.png" alt="" /></i>
       </div>
     </section>
 
-    <div class="title">
-      <h2>donation history</h2>
+    <div class="history-tabs">
+      <button
+        class="tab-button active"
+        onclick="openTab(event, 'donationHistory')"
+      >
+        my donations
+      </button>
+      <button class="tab-button" onclick="openTab(event, 'volunteerHistory')">
+        my volunteer activities
+      </button>
     </div>
 
-    <% if (historyEvents && historyEvents.length > 0) { %>
-      <% historyEvents.forEach(event => { %>
-        <div class="history-content" data-event-id="<%= event.id %>">
-          <h2><%= event.event_name %></h2>
-          <% if (event.end_date) { %>
-            <p>Completed on <%= event.end_date %></p>
-          <% } else if (event.first_donation_date) { %>
-            <p>First donated on <%= event.first_donation_date %></p>
-          <% } %>
-          <p><%= event.additional_notes %></p>
-          <div class="donation-status">
-            <p>Raised: IDR <%= event.raised_money.toLocaleString() %> / <%= event.target_money.toLocaleString() %></p>
-          </div>
-          <!-- <% if (event.thumbnail_photo) { %>
-            <img src="/uploads/<%= event.thumbnail_photo %>" alt="Event Thumbnail" class="history-thumbnail">
-          <% } %> -->
-          <button onclick="window.location.href='/archive#event-<%= event.id %>'">check result</button>
+    <div id="donationHistory" class="tab-content active">
+      <% if (historyEvents && historyEvents.length > 0) { %> <%
+      historyEvents.forEach(event => { %>
+      <div class="history-content" data-event-id="<%= event.id %>">
+        <h2><%= event.event_name %></h2>
+        <% if (event.end_date) { %>
+        <p>Completed on <%= event.end_date %></p>
+        <% } else if (event.first_donation_date) { %>
+        <p>First donated on <%= event.first_donation_date %></p>
+        <% } %>
+        <p><%= event.additional_notes %></p>
+        <div class="donation-status">
+          <p>
+            Your donation: IDR <%= event.user_donation_amount.toLocaleString()
+            %>
+          </p>
+          <p>
+            Total raised: IDR <%= event.raised_money.toLocaleString() %> / <%=
+            event.target_money.toLocaleString() %>
+          </p>
         </div>
-      <% }) %>
-    <% } else { %>
+        <button onclick="window.location.href='/archive#event-<%= event.id %>'">
+          check result
+        </button>
+      </div>
+      <% }) %> <% } else { %>
       <div class="history-content empty-state">
         <h2>no donation history yet</h2>
-        <p>your donation history will appear here once you make your first donation</p>
-        <!-- <button onclick="window.location.href='/'">Explore Events</button> -->
+        <p>
+          your donation history will appear here once you make your first
+          donation
+        </p>
       </div>
-    <% } %>
-    
+      <% } %>
+    </div>
+
+    <div id="volunteerHistory" class="tab-content">
+      <% if (volunteerActivities && volunteerActivities.length > 0) { %> <%
+      volunteerActivities.forEach(activity => { %>
+      <div class="history-content" data-event-id="<%= activity.event_id %>">
+        <h2><%= activity.event_name %></h2>
+        <p>
+          applied on <%= new
+          Date(activity.created_at).toLocaleDateString('en-GB') %>
+        </p>
+        <div class="volunteer-status">
+          <p>
+            status:
+            <span class="status-<%= activity.status %>"
+              ><%= activity.status.charAt(0).toUpperCase() +
+              activity.status.slice(1) %></span
+            >
+          </p>
+          <% if (activity.status === 'approved' || activity.status ===
+          'completed') { %>
+          <p>Contact coordinator: <%= activity.coordinator_email %></p>
+          <% } %>
+        </div>
+        <button
+          onclick="window.location.href='/event/<%= activity.event_id %>'"
+        >
+          View Event
+        </button>
+      </div>
+      <% }) %> <% } else { %>
+      <div class="history-content empty-state">
+        <h2>no volunteer history yet</h2>
+        <p>your volunteer activities will appear here once you apply</p>
+      </div>
+      <% } %>
+    </div>
 
     <footer>
-      <a href="/"><img src="./assets/plantwithus.png" alt="logo plant with us" /></a>
+      <a href="/"
+        ><img src="./assets/planwithus.png" alt="logo plan with us"
+      /></a>
       <a href="/create">create</a>
       <a href="/history">history</a>
       <a href="/archive">archive</a>
-  </footer>
+    </footer>
 
     <div class="footer-plus">
-        <a href="">privacy policy</a>
-        <p>plant with us</p>
+      <a href="">privacy policy</a>
+      <p>plan with us</p>
     </div>
 
     <script src="./js/script.js"></script>
+    <script>
+      function openTab(evt, tabName) {
+        // Hide all tab content
+        const tabContents = document.getElementsByClassName("tab-content");
+        for (let i = 0; i < tabContents.length; i++) {
+          tabContents[i].classList.remove("active");
+        }
+
+        // Remove active class from all tab buttons
+        const tabButtons = document.getElementsByClassName("tab-button");
+        for (let i = 0; i < tabButtons.length; i++) {
+          tabButtons[i].classList.remove("active");
+        }
+
+        // Show the selected tab content and add active class to the button
+        document.getElementById(tabName).classList.add("active");
+        evt.currentTarget.classList.add("active");
+      }
+    </script>
   </body>
 </html>

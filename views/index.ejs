@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" href="./assets/favicon.ico">
-    <title>plant with us - made for earth</title>
+    <link rel="icon" href="./assets/favicon.ico" />
+    <title>plan with us - made for earth</title>
     <link rel="stylesheet" href="./styles/style.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -15,13 +15,22 @@
   </head>
   <body>
     <section id="header">
-      <a href="/"><img src="./assets/plantwithus.png" alt="logo plant with us" /></a>
+      <a href="/"
+        ><img src="./assets/planwithus.png" alt="logo plan with us"
+      /></a>
       <div>
         <ul id="navbar">
           <li><a class="active" href="/">explore</a></li>
           <li><a href="/create">create</a></li>
           <li><a href="/history">history</a></li>
           <li><a href="/archive">archive</a></li>
+          <li class="profile-dropdown">
+            <a href="/profile" id="profileBtn">profile</a>
+            <div class="dropdown-content">
+              <a href="/profile">my profile</a>
+              <a href="/logout">logout</a>
+            </div>
+          </li>
           <a href="#" id="close"><img src="./assets/x.png" alt="" /></a>
         </ul>
       </div>
@@ -53,10 +62,10 @@
             <input
               type="number"
               id="donationAmount"
-              placeholder="Enter amount"
+              placeholder="enter amount"
               min="1"
             />
-            <button onclick="confirmDonation()">Confirm Donation</button>
+            <button onclick="confirmDonation()">donate</button>
           </div>
         </div>
       </div>
@@ -89,7 +98,7 @@
         <!-- Donation Status -->
         <div class="donation-info">
           <p>
-            Goal:
+            goal:
             <span class="raised-amount"><%= event.raised_money || 0 %></span> /
             <span class="goal-amount"><%= event.target_money %></span>
           </p>
@@ -97,28 +106,292 @@
 
         <!-- Donation Button -->
         <div class="button-style-main">
-          <button onclick="openModal(<%= event.id %>)">Donate</button>
+          <button type="button" onclick="openModal('<%= event.id %>')">
+            donate
+          </button>
           <button>
-            <a href="/download/<%= event.id %>">Proposal</a>
+            <a href="/download/<%= event.id %>">proposal</a>
           </button>
         </div>
+        <% if (event.volunteer_needed && event.status === 'active') { %>
+        <div class="volunteer-section">
+          <h4>volunteers needed!</h4>
+          <p><%= event.volunteer_description %></p>
+          <p>
+            positions:
+            <span id="volunteer-count-<%= event.id %>">loading...</span> / <%=
+            event.max_volunteers %>
+          </p>
+          <button
+            onclick="openVolunteerModal(<%= event.id %>)"
+            class="volunteer-btn"
+            id="volunteer-btn-<%= event.id %>"
+            data-event-id="<%= event.id %>"
+          >
+            apply
+          </button>
+        </div>
+        <% } %>
       </div>
     </div>
     <% }) %>
 
+    <div id="volunteerModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="closeVolunteerModal()">&times;</span>
+        <h3>volunteer application</h3>
+        <form id="volunteerForm">
+          <input type="hidden" id="volunteerEventId" name="eventId" />
+          <div class="form-group-name">
+            <label for="volunteerName">name</label>
+            <input type="text" id="volunteerName" name="name" required placeholder="input your name"/>
+          </div>
+          <div class="form-group-email">
+            <label for="volunteerEmail">email</label>
+            <input type="email" id="volunteerEmail" name="email" required placeholder="input your email"/>
+          </div>
+          <div class="form-group-phone">
+            <label for="volunteerPhone">phone</label>
+            <input type="tel" id="volunteerPhone" name="phone" required placeholder="input your phone num"/>
+          </div>
+          <div class="form-group-msg">
+            <label for="volunteerMessage">reason to be a volunteer</label>
+            <textarea
+              id="volunteerMessage"
+              name="message"
+              rows="3"
+              required
+              placeholder="optional"
+            ></textarea>
+          </div>
+          <button
+            type="button"
+            onclick="submitVolunteerApplication()"
+            class="btn-primary"
+          >
+            submit
+          </button>
+        </form>
+      </div>
+    </div>
+
     <footer>
-      <a href="/"><img src="./assets/plantwithus.png" alt="logo plant with us" /></a>
+      <a href="/"
+        ><img src="./assets/planwithus.png" alt="logo plan with us"
+      /></a>
       <a href="/create">create</a>
       <a href="/history">history</a>
       <a href="/archive">archive</a>
-  </footer>
+    </footer>
 
     <div class="footer-plus">
       <a href="">privacy policy</a>
-      <p>plant with us</p>
+      <p>plan with us</p>
     </div>
 
     <!-- Move your script to the end of body -->
     <script src="./js/script.js"></script>
+    <script>
+      // Donation handling
+      let currentEventId = null;
+
+      // Donation Modal Functions
+      function openModal(eventId) {
+        currentEventId = eventId;
+        const donationModal = document.getElementById("donationModal");
+        donationModal.setAttribute("data-event-id", eventId);
+        donationModal.style.display = "block";
+      }
+
+      function closeModal() {
+        document.getElementById("donationModal").style.display = "none";
+        // Reset donation amount field
+        document.getElementById("donationAmount").value = "";
+      }
+
+      function confirmDonation() {
+        const eventId = document
+          .getElementById("donationModal")
+          .getAttribute("data-event-id");
+        const amount = document.getElementById("donationAmount").value;
+        const paymentMethod = document.getElementById("paymentMethod").value;
+
+        if (!amount || amount <= 0) {
+          alert("Please enter a valid donation amount");
+          return;
+        }
+
+        // Send donation to server
+        fetch("/donate", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            eventId: eventId,
+            donationAmount: amount,
+            paymentMethod: paymentMethod,
+          }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.success) {
+              // Update UI with new donation amount
+              const container = document.querySelector(
+                `.container-1[data-event-id="${eventId}"]`
+              );
+              if (container) {
+                const raisedElement = container.querySelector(".raised-amount");
+                if (raisedElement) {
+                  raisedElement.textContent = data.raised_money;
+
+                  // Update progress bar
+                  const goalAmount = parseFloat(
+                    container.querySelector(".goal-amount").textContent
+                  );
+                  const progressBar = container.querySelector(".progress-bar");
+                  if (progressBar) {
+                    progressBar.style.width = `${
+                      (data.raised_money / goalAmount) * 100
+                    }%`;
+                  }
+                }
+              }
+
+              // Close modal and show success message
+              closeModal();
+              alert("Thank you for your donation!");
+            } else {
+              alert("Error: " + data.message);
+            }
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+            alert("An error occurred while processing your donation");
+          });
+      }
+
+      // Make sure modal closes when clicking outside
+      window.onclick = function (event) {
+        const modal = document.getElementById("donationModal");
+        if (event.target == modal) {
+          closeModal();
+        }
+
+        const volunteerModal = document.getElementById("volunteerModal");
+        if (event.target == volunteerModal) {
+          closeVolunteerModal();
+        }
+      };
+
+      // Volunteer Modal Functions
+      let currentVolunteerEventId = null;
+
+      function openVolunteerModal(eventId) {
+        currentVolunteerEventId = eventId;
+        document.getElementById("volunteerEventId").value = eventId;
+        document.getElementById("volunteerModal").style.display = "block";
+      }
+
+      function closeVolunteerModal() {
+        document.getElementById("volunteerModal").style.display = "none";
+        // Reset form fields
+        document.getElementById("volunteerForm").reset();
+      }
+
+      function submitVolunteerApplication() {
+        const eventId = document.getElementById("volunteerEventId").value;
+        const name = document.getElementById("volunteerName").value;
+        const email = document.getElementById("volunteerEmail").value;
+        const phone = document.getElementById("volunteerPhone").value;
+        const message = document.getElementById("volunteerMessage").value;
+
+        console.log("Submitting volunteer application:", {
+          eventId,
+          name,
+          email,
+          phone,
+          messageLength: message.length,
+        });
+
+        if (!name || !email || !phone || !message) {
+          alert("Please fill in all required fields");
+          return;
+        }
+
+        fetch("/volunteer/apply", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            eventId: eventId,
+            name: name,
+            email: email,
+            phone: phone,
+            message: message,
+          }),
+        })
+          .then((response) => {
+            console.log("Response status:", response.status);
+            if (!response.ok) {
+              return response.text().then((text) => {
+                throw new Error(
+                  `Server responded with ${response.status}: ${text}`
+                );
+              });
+            }
+            return response.json();
+          })
+          .then((data) => {
+            console.log("Success response:", data);
+            if (data.success) {
+              // Update UI after successful application
+              closeVolunteerModal();
+              alert("Thank you for your volunteer application!");
+
+              // Reload the page to update UI
+              window.location.reload();
+            } else {
+              alert("Error: " + (data.message || "An error occurred"));
+            }
+          })
+          .catch((error) => {
+            console.error("Submission error details:", error);
+            alert("Error submitting application: " + error.message);
+          });
+      }
+
+      // Load volunteer counts on page load
+      document.addEventListener("DOMContentLoaded", function () {
+        const volunteerCountElements = document.querySelectorAll(
+          '[id^="volunteer-count-"]'
+        );
+
+        volunteerCountElements.forEach((element) => {
+          const eventId = element.id.split("-").pop();
+
+          // Fetch volunteer count for this event
+          fetch(`/volunteer-count/${eventId}`)
+            .then((response) => response.json())
+            .then((data) => {
+              element.textContent = data.count || 0;
+
+              // Check if event is full and update button
+              if (data.isFull) {
+                const btn = document.getElementById(`volunteer-btn-${eventId}`);
+                if (btn) {
+                  btn.disabled = true;
+                  btn.textContent = "Positions Filled";
+                }
+              }
+            })
+            .catch((error) => {
+              console.error("Error fetching volunteer count:", error);
+              element.textContent = "Error";
+            });
+        });
+      });
+    </script>
   </body>
 </html>

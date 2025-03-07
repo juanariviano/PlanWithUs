@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" href="./assets/favicon.ico">
-    <title>event - plant with us</title>
+    <title>event - plan with us</title>
     <link rel="stylesheet" href="./styles/style.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -15,18 +15,23 @@
   </head>
   <body>
     <section id="header">
-      <a href="/"><img src="./assets/plantwithus.png" alt="logo plant with us" /></a>
-
+      <a href="/"><img src="./assets/planwithus.png" alt="logo plan with us" /></a>
       <div>
         <ul id="navbar">
           <li><a href="/">explore</a></li>
           <li><a class="active" href="/create">create</a></li>
           <li><a href="/history">history</a></li>
           <li><a href="/archive">archive</a></li>
+          <li class="profile-dropdown">
+            <a href="#" id="profileBtn">profile</a>
+            <div class="dropdown-content">
+              <a href="/profile">my profile</a>
+              <a href="/logout">logout</a>
+            </div>
+          </li>
           <a href="#" id="close"><img src="./assets/x.png" alt="" /></a>
         </ul>
       </div>
-
       <div id="mobile">
         <i id="bar"><img src="./assets/list.png" alt="" /></i>
       </div>
@@ -62,6 +67,27 @@
             <input type="file" name="file" id="proposal" accept="application/pdf" required />
           </div>
         </div>
+
+        <div class="form-group">
+          <label for="volunteer_needed">need volunteers?</label>
+          <div class="toggle-container">
+            <input type="checkbox" id="volunteer_needed" name="volunteer_needed" class="toggle-input">
+            <label for="volunteer_needed" class="toggle-label"></label>
+            <span class="toggle-text">no</span>
+            <span class="toggle-text">yes</span>
+          </div>
+        </div>
+        
+        <div id="volunteer-details" style="display: none;">
+          <div class="form-group">
+            <label for="volunteer_description">Volunteer Job Description</label>
+            <textarea id="volunteer_description" name="volunteer_description" class="form-control" rows="3" placeholder="Describe what volunteers will be doing..."></textarea>
+          </div>
+          <div class="form-group">
+            <label for="max_volunteers">Maximum Number of Volunteers Needed</label>
+            <input type="number" id="max_volunteers" name="max_volunteers" class="form-control" min="1" value="1">
+          </div>
+        </div>
     
         <div class="form-style-2">
           <textarea name="additionalnotes" placeholder="additional notes"></textarea>
@@ -75,7 +101,7 @@
     </div>
 
     <footer>
-        <a href="/"><img src="./assets/plantwithus.png" alt="logo plant with us" /></a>
+        <a href="/"><img src="./assets/planwithus.png" alt="logo plan with us" /></a>
         <a href="/create">create</a>
         <a href="/history">history</a>
         <a href="/archive">archive</a>
@@ -83,7 +109,7 @@
 
     <div class="footer-plus">
         <a href="">privacy policy</a>
-        <p>plant with us</p>
+        <p>plan with us</p>
     </div>
 
     <script src="./js/script.js"></script>
