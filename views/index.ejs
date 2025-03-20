@@ -28,6 +28,7 @@
             <a href="/profile" id="profileBtn">profile</a>
             <div class="dropdown-content">
               <a href="/profile">my profile</a>
+              <a href="/volunteer-management">manage volunteers</a>
               <a href="/logout">logout</a>
             </div>
           </li>
@@ -119,8 +120,8 @@
           <p><%= event.volunteer_description %></p>
           <p>
             positions:
-            <span id="volunteer-count-<%= event.id %>">loading...</span> / <%=
-            event.max_volunteers %>
+            <span id="volunteer-count-<%= event.id %>">loading...</span> / 
+            <%=event.max_volunteers %>
           </p>
           <button
             onclick="openVolunteerModal(<%= event.id %>)"
@@ -372,10 +373,10 @@
           const eventId = element.id.split("-").pop();
 
           // Fetch volunteer count for this event
-          fetch(`/volunteer-count/${eventId}`)
+          fetch(`/volunteer/count/${eventId}`)
             .then((response) => response.json())
             .then((data) => {
-              element.textContent = data.count || 0;
+              element.textContent = data.currentCount || 0;
 
               // Check if event is full and update button
               if (data.isFull) {

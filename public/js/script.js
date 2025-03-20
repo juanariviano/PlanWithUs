@@ -143,6 +143,38 @@ function closeVolunteerModal() {
   document.getElementById('volunteerForm').reset();
 }
 
+// Load volunteer counts on page load
+document.addEventListener("DOMContentLoaded", function () {
+  const volunteerCountElements = document.querySelectorAll(
+    '[id^="volunteer-count-"]'
+  );
+
+  volunteerCountElements.forEach((element) => {
+    const eventId = element.id.split("-").pop();
+
+    // Perbaiki URL endpoint
+    fetch(`/volunteer-count/${eventId}`)
+      .then((response) => response.json())
+      .then((data) => {
+        // Ubah untuk menggunakan properti yang sesuai dengan API
+        element.textContent = data.currentCount || 0;
+
+        // Check if event is full and update button
+        if (data.isFull) {
+          const btn = document.getElementById(`volunteer-btn-${eventId}`);
+          if (btn) {
+            btn.disabled = true;
+            btn.textContent = "Positions Filled";
+          }
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching volunteer count:", error);
+        element.textContent = "Error";
+      });
+  });
+});
+
 async function submitVolunteerApplication() {
   const formData = {
     eventId: document.getElementById('volunteerEventId').value,
@@ -184,6 +216,48 @@ async function submitVolunteerApplication() {
     alert('An error occurred while submitting your application.');
   }
 }
+
+// Fungsi untuk update hitungan volunteer
+function updateVolunteerCount(eventId) {
+  const countElement = document.getElementById(`volunteer-count-${eventId}`);
+  if (!countElement) return;
+  
+  fetch(`/volunteer/count/${eventId}`)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(data => {
+      // Pastikan format data sesuai
+      countElement.textContent = data.currentCount || 0;
+      
+      // Update status button jika posisi sudah penuh
+      if (data.isFull) {
+        const btn = document.getElementById(`volunteer-btn-${eventId}`);
+        if (btn) {
+          btn.disabled = true;
+          btn.textContent = 'Positions Filled';
+          btn.classList.add('volunteer-full');
+        }
+      }
+    })
+    .catch(error => {
+      console.error('Error fetching volunteer count:', error);
+      countElement.textContent = "Error";
+    });
+}
+
+// Panggil fungsi ini saat halaman dimuat
+document.addEventListener('DOMContentLoaded', function() {
+  // Ambil semua elemen dengan data-event-id
+  const eventElements = document.querySelectorAll('[data-event-id]');
+  eventElements.forEach(element => {
+    const eventId = element.getAttribute('data-event-id');
+    updateVolunteerCount(eventId);
+  });
+});
 
 async function updateVolunteerCountDisplay(eventId) {
   try {

@@ -568,6 +568,8 @@ app.post("/profile/update", isAuthenticated, async (req, res) => {
   }
 });
 
+
+
 // Route for volunteer application
 app.post('/volunteer/apply', isAuthenticated, async (req, res) => {
   const { eventId, name, email, phone, message } = req.body;
@@ -728,6 +730,165 @@ app.get('/my-volunteer', isAuthenticated, async (req, res) => {
     console.error('Error retrieving volunteer activities:', err);
     res.status(500).send('Error retrieving volunteer activities');
   }
+});
+
+// Contoh implementasi untuk Express.js
+
+// Mendapatkan daftar volunteer untuk suatu event
+app.get('/api/volunteers/:eventId', isAuthenticated, async (req, res) => {
+  const { eventId } = req.params;
+  const userId = req.session.userId;
+  
+  try {
+    // Periksa apakah user adalah pembuat event
+    const event = await db.query(
+      'SELECT * FROM event WHERE id = $1 AND user_id = $2',
+      [eventId, userId]
+    );
+    
+    if (event.rows.length === 0) {
+      return res.status(403).json({ 
+        success: false, 
+        message: 'You are not authorized to view volunteers for this event' 
+      });
+    }
+    
+    // Ambil daftar volunteer untuk event ini
+    const volunteers = await db.query(
+      `SELECT v.id, v.name, v.email, v.phone, v.message, v.status, v.created_at 
+       FROM volunteers v 
+       WHERE v.event_id = $1 
+       ORDER BY v.created_at DESC`,
+      [eventId]
+    );
+    
+    res.json({
+      success: true,
+      volunteers: volunteers.rows
+    });
+  } catch (error) {
+    console.error('Error fetching volunteers:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch volunteer applications'
+    });
+  }
+});
+
+// Endpoint untuk memperbarui status volunteer
+app.post('/api/volunteer/update-status', isAuthenticated, async (req, res) => {
+  const { volunteerId, eventId, status } = req.body;
+  const userId = req.session.userId;
+  
+  // Validasi input
+  if (!volunteerId || !eventId || !status) {
+    return res.status(400).json({
+      success: false,
+      message: 'Missing required fields'
+    });
+  }
+  
+  // Validasi status yang diizinkan
+  const allowedStatuses = ['pending', 'approved', 'rejected', 'completed'];
+  if (!allowedStatuses.includes(status)) {
+    return res.status(400).json({
+      success: false,
+      message: 'Invalid status'
+    });
+  }
+  
+  try {
+    // Periksa apakah user adalah pembuat event
+    const event = await db.query(
+      'SELECT * FROM event WHERE id = $1 AND user_id = $2',
+      [eventId, userId]
+    );
+    
+    if (event.rows.length === 0) {
+      return res.status(403).json({ 
+        success: false, 
+        message: 'You are not authorized to manage volunteers for this event' 
+      });
+    }
+    
+    // Periksa apakah volunteer yang diupdate ada dan terkait dengan event yang benar
+    const volunteer = await db.query(
+      'SELECT * FROM volunteers WHERE id = $1 AND event_id = $2',
+      [volunteerId, eventId]
+    );
+    
+    if (volunteer.rows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: 'Volunteer application not found'
+      });
+    }
+    
+    // Update status volunteer
+    await db.query(
+      'UPDATE volunteers SET status = $1, updated_at = NOW() WHERE id = $2',
+      [status, volunteerId]
+    );
+    
+    // Jika status berubah menjadi approved, tambahkan informasi contact coordinator
+    if (status === 'approved') {
+      // Ambil email pembuat event
+      const creatorEmail = await db.query(
+        'SELECT email FROM users WHERE id = $1',
+        [userId]
+      );
+      
+      // Update coordinator_email dalam tabel volunteers
+      if (creatorEmail.rows.length > 0) {
+        await db.query(
+          'UPDATE volunteers SET coordinator_email = $1 WHERE id = $2',
+          [creatorEmail.rows[0].email, volunteerId]
+        );
+      }
+    }
+    
+    // Kirim notifikasi email ke volunteer (implementasi opsional)
+    // sendVolunteerStatusNotification(volunteer.rows[0].email, status, event.rows[0].event_name);
+    
+    res.json({
+      success: true,
+      message: `Volunteer status updated to ${status}`
+    });
+  } catch (error) {
+    console.error('Error updating volunteer status:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to update volunteer status'
+    });
+  }
+});
+
+// Endpoint untuk mendapatkan daftar event yang dibuat oleh user
+app.get('/my-events', isAuthenticated, async (req, res) => {
+  const userId = req.session.userId;
+  
+  try {
+    const events = await db.query(
+      'SELECT id, event_name FROM event WHERE user_id = $1 ORDER BY id DESC',
+      [userId]
+    );
+    
+    res.render('volunteer-management.ejs', {
+      myEvents: events.rows,
+      user: {
+        id: req.session.userId,
+        name: req.session.userName
+      }
+    });
+  } catch (error) {
+    console.error('Error fetching my events:', error);
+    res.status(500).send('Failed to load events');
+  }
+});
+
+
+app.get('/volunteer-management', isAuthenticated, (req, res) => {
+  res.redirect('/my-events');
 });
 
 // Menjalankan Server

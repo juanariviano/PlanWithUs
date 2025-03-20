@@ -173,6 +173,32 @@ input {
     align-items: center;
     gap: 10px;
 }
+.form-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+#volunteer_description { 
+    font-family: "Quicksand", serif;
+    border-radius: 3px;
+    padding: 15px 25px;
+    border: 0;
+    background-color: #F7EED3;
+    width: 465px;
+    height: 100px;
+    resize: none;
+    margin-bottom: 50px;
+}
+
+.form-group-1 {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 50px;
+}
 
 #volunteerForm .form-group-name {
     /* background-color: rebeccapurple; */
@@ -984,5 +1010,125 @@ footer a {
   
   .toggle-input:checked ~ .toggle-text:last-of-type {
     display: inline;
+  }
+  
+
+  /* Styles for the volunteer management page */
+#management-header {
+    text-align: center;
+    padding: 2rem 0;
+    background-color: #f8f8f8;
+  }
+  
+  #management-header h1 {
+    margin-bottom: 0.5rem;
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 600;
+  }
+  
+  #event-selector {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+  }
+  
+  #event-selector select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-family: 'Quicksand', sans-serif;
+  }
+  
+  #volunteer-list {
+    max-width: 800px;
+    margin: 0 auto 4rem;
+    padding: 0 1rem;
+  }
+  
+  #volunteer-list h2 {
+    margin-bottom: 1.5rem;
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 500;
+  }
+  
+  .volunteer-card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  }
+  
+  .volunteer-info h3 {
+    margin-top: 0;
+    font-size: 1.25rem;
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 600;
+  }
+  
+  .volunteer-info p {
+    margin: 0.5rem 0;
+    font-family: 'Quicksand', sans-serif;
+  }
+  
+  .volunteer-info .status {
+    font-weight: 500;
+  }
+  
+  .volunteer-actions {
+    margin-top: 1.5rem;
+    display: flex;
+    gap: 1rem;
+  }
+  
+  .volunteer-actions button {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .approve-btn {
+    background-color: #4CAF50;
+    color: white;
+  }
+  
+  .approve-btn:hover {
+    background-color: #45a049;
+  }
+  
+  .reject-btn {
+    background-color: #f44336;
+    color: white;
+  }
+  
+  .reject-btn:hover {
+    background-color: #d32f2f;
+  }
+  
+  .complete-btn {
+    background-color: #2196F3;
+    color: white;
+  }
+  
+  .complete-btn:hover {
+    background-color: #0b7dda;
+  }
+  
+  .select-message, .no-volunteers, .error {
+    text-align: center;
+    padding: 2rem;
+    font-family: 'Quicksand', sans-serif;
+    color: #666;
+  }
+  
+  .error {
+    color: #f44336;
   }
   

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="./assets/favicon.ico" />
+    <title>volunteer management - plan with us</title>
+    <link rel="stylesheet" href="./styles/style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Quicksand:wght@300..700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <section id="header">
+      <a href="/"
+        ><img src="./assets/planwithus.png" alt="logo plan with us"
+      /></a>
+      <div>
+        <ul id="navbar">
+          <li><a href="/">explore</a></li>
+          <li><a href="/create">create</a></li>
+          <li><a href="/history">history</a></li>
+          <li><a href="/archive">archive</a></li>
+          <li class="profile-dropdown">
+            <a href="#" id="profileBtn">profile</a>
+            <div class="dropdown-content">
+              <a href="/profile">my profile</a>
+              <a href="/volunteer-management">volunteer management</a>
+              <a href="/logout">logout</a>
+            </div>
+          </li>
+          <a href="#" id="close"><img src="./assets/x.png" alt="" /></a>
+        </ul>
+      </div>
+      <div id="mobile">
+        <i id="bar"><img src="./assets/list.png" alt="" /></i>
+      </div>
+    </section>
+
+    <div class="profile-menu">
+        <h2>My Account</h2>
+        <ul>
+          <li><a href="/profile">Profile Settings</a></li>
+          <li><a href="/my-events">My Events</a></li>
+          <li><a href="/volunteer-management">Volunteer Management</a></li>
+          <li><a href="/history">Donation & Volunteer History</a></li>
+        </ul>
+      </div>
+
+    <section id="management-header">
+      <h1>Volunteer Management</h1>
+      <p>Manage volunteer applications for your events</p>
+    </section>
+
+    <section id="event-selector">
+      <h2>Select Event</h2>
+      <select id="eventSelector" onchange="loadVolunteers()">
+        <option value="">Choose an event</option>
+        <% myEvents.forEach(event => { %>
+          <option value="<%= event.id %>"><%= event.event_name %></option>
+        <% }); %>
+      </select>
+    </section>
+
+    <section id="volunteer-list">
+      <h2>Volunteer Applications</h2>
+      <div id="volunteer-applications">
+        <p class="select-message">Please select an event to view volunteer applications</p>
+      </div>
+    </section>
+
+    <!-- Template for volunteer application cards -->
+    <template id="volunteer-card-template">
+      <div class="volunteer-card">
+        <div class="volunteer-info">
+          <h3 class="volunteer-name"></h3>
+          <p class="volunteer-email"></p>
+          <p class="volunteer-phone"></p>
+          <p class="volunteer-message"></p>
+          <p class="application-date"></p>
+          <p class="status"></p>
+        </div>
+        <div class="volunteer-actions">
+          <button class="approve-btn" onclick="updateVolunteerStatus(this, 'approved')">Approve</button>
+          <button class="reject-btn" onclick="updateVolunteerStatus(this, 'rejected')">Reject</button>
+          <button class="complete-btn" onclick="updateVolunteerStatus(this, 'completed')">Mark as Completed</button>
+        </div>
+      </div>
+    </template>
+
+    <footer>
+      <a href="/"
+        ><img src="./assets/planwithus.png" alt="logo plan with us"
+      /></a>
+      <a href="/create">create</a>
+      <a href="/history">history</a>
+      <a href="/archive">archive</a>
+    </footer>
+
+    <div class="footer-plus">
+      <a href="">privacy policy</a>
+      <p>plan with us</p>
+    </div>
+
+    <script src="./js/script.js"></script>
+    <script src="./js/volunteer-management.js"></script>
+  </body>
+</html>
