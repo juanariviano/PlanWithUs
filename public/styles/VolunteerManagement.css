@@ -1,17 +1,17 @@
+.layout{
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+  width: 100%;
+}
 
-
-/* Sidebar profile menu */
 .profile-menu {
-  width: 250px;
-  height: 100vh;
+  width: 15vw;
+  /* height: 100vh; */
   background-color: #989282;
   color: white;
-  position: fixed;
-  left: 0;
-  top: 102;
   padding: 25px 0;
-  z-index: 50;
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  /* box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); */
 }
 
 .profile-menu h2 {
@@ -47,33 +47,39 @@
   border-left: 3px solid #3498db;
 }
 
+.main-content{
+  flex: 1;
+  padding-bottom: 50px;
+  padding: 50px 70px;
+}
+
 /* Management header */
 #management-header {
-  background-color: #3498db;
-  color: white;
-  padding: 20px 25px;
-  border-radius: 8px;
-  margin-bottom: 25px;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+  background-color: white;
+  color: black;
+  padding: 20px 0;
+  margin: 0 0 50px 0;
+  /* box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1); */
 }
 
 #management-header h1 {
+  text-align: left;
   margin: 0 0 8px 0;
   font-size: 2rem;
 }
 
 #management-header p {
+  text-align: left;
   margin: 0;
   opacity: 0.9;
   font-size: 1.1rem;
 }
 
-/* Event selector */
 #event-selector {
   background-color: white;
   border-radius: 8px;
-  padding: 20px;
-  margin-bottom: 25px;
+  padding: 40px 30px;
+  margin-bottom: 50px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
@@ -100,11 +106,10 @@
   box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
 }
 
-/* Volunteer list section */
 #volunteer-list {
   background-color: white;
   border-radius: 8px;
-  padding: 20px;
+  padding: 40px 30px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
@@ -122,7 +127,6 @@
   padding: 30px 0;
 }
 
-/* Volunteer cards */
 .volunteer-card {
   border: 1px solid #e0e0e0;
   border-radius: 8px;
@@ -199,7 +203,6 @@
   color: white;
 }
 
-/* Volunteer actions */
 .volunteer-actions {
   display: flex;
   flex-direction: column;
@@ -244,7 +247,6 @@
   background-color: #2980b9;
 }
 
-/* Responsive adjustments */
 @media (max-width: 768px) {
   .volunteer-card {
     flex-direction: column;
@@ -270,4 +272,8 @@
 
 .volunteer-card {
   animation: fadeIn 0.3s ease-out;
+}
+
+footer{
+  margin-top: 0;
 }

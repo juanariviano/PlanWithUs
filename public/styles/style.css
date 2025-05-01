@@ -1018,7 +1018,7 @@ footer a {
   
 
   /* Styles for the volunteer management page */
-#management-header {
+/* #management-header {
     text-align: center;
     padding: 2rem 0;
     background-color: #f8f8f8;
@@ -1130,7 +1130,7 @@ footer a {
     padding: 2rem;
     font-family: 'Quicksand', sans-serif;
     color: #666;
-  }
+  } */
   
   .error {
     color: #f44336;

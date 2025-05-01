@@ -41,37 +41,41 @@
       </div>
     </section>
 
-    <div class="profile-menu">
-      <h2>My Account</h2>
-      <ul>
-        <li><a href="/profile">Profile Settings</a></li>
-        <li><a href="/my-events">My Events</a></li>
-        <li><a href="/volunteer-management">Volunteer Management</a></li>
-        <li><a href="/history">Donation & Volunteer History</a></li>
-      </ul>
-    </div>
-
-    <section id="management-header">
-      <h1>Volunteer Management</h1>
-      <p>Manage volunteer applications for your events</p>
-    </section>
-
-    <section id="event-selector">
-      <h2>Select Event</h2>
-      <select id="eventSelector" onchange="loadVolunteers()">
-        <option value="">Choose an event</option>
-        <% myEvents.forEach(event => { %>
-          <option value="<%= event.id %>"><%= event.event_name %></option>
-        <% }); %>
-      </select>
-    </section>
-
-    <section id="volunteer-list">
-      <h2>Volunteer Applications</h2>
-      <div id="volunteer-applications">
-        <p class="select-message">Please select an event to view volunteer applications</p>
+    <div class="layout">
+      <div class="profile-menu">
+        <h2>My Account</h2>
+        <ul>
+          <li><a href="/profile">Profile Settings</a></li>
+          <li><a href="/my-events">My Events</a></li>
+          <li><a href="/volunteer-management">Volunteer Management</a></li>
+          <li><a href="/history">Donation & Volunteer History</a></li>
+        </ul>
       </div>
-    </section>
+  
+      <div class="main-content">
+        <section id="management-header">
+          <h1>Volunteer Management</h1>
+          <p>Manage volunteer applications for your events</p>
+        </section>
+    
+        <section id="event-selector">
+          <h2>Select Event</h2>
+          <select id="eventSelector" onchange="loadVolunteers()">
+            <option value="">Choose an event</option>
+            <% myEvents.forEach(event => { %>
+              <option value="<%= event.id %>"><%= event.event_name %></option>
+            <% }); %>
+          </select>
+        </section>
+    
+        <section id="volunteer-list">
+          <h2>Volunteer Applications</h2>
+          <div id="volunteer-applications">
+            <p class="select-message">Please select an event to view volunteer applications</p>
+          </div>
+        </section>
+      </div>
+    </div>
 
     <!-- Template for volunteer application cards -->
     <template id="volunteer-card-template">
