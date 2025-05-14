@@ -39,18 +39,22 @@
     </section>
 
     <div class="card-archive">
-      <% archives.forEach(event => { %>
-        <div class="card-content">
-          <div>
-            <img src="./uploads/<%= event.thumbnail_photo %>" alt="<%= event.name %>" />
+      <% if (archives.length === 0) { %>
+        <p>Archives are empty</p>
+      <% } else { %>
+        <% archives.forEach(event => { %>
+          <div class="card-content">
+            <div>
+              <img src="./uploads/<%= event.thumbnail_photo %>" alt="<%= event.name %>" />
+            </div>
+            <div class="money-style">
+              <p><%= event.name %></p>
+              <p>IDR<%= event.raised_money ? event.raised_money.toLocaleString() : "0" %></p>
+            </div>
           </div>
-          <div class="money-style">
-            <p><%= event.name %></p>
-            <p>IDR<%= event.raised_money ? event.raised_money.toLocaleString() : "0" %></p>
-          </div>
-        </div>
-      <% }) %>
-    </div>    
+        <% }) %>
+      <% } %>
+    </div>
 
     <footer>
       <a href="/"><img src="./assets/planwithus.png" alt="logo plan with us" /></a>

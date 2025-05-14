@@ -8,10 +8,11 @@ import sharp from "sharp";
 import { fileURLToPath } from "url";
 import session from "express-session";
 import bcrypt from "bcrypt";
+import dotenv from 'dotenv';
 
 // Import file system module
 import { dirname } from 'path';
-
+dotenv.config();
 const app = express();
 const port = 3000;
 
@@ -50,11 +51,11 @@ if (!fs.existsSync(uploadDir)) {
 
 // Koneksi Database
 const db = new pg.Client({
-  user: "postgres",
-  host: "localhost",
-  database: "plantwithus",
-  password: "babiliar",
-  port: 4000,
+  user: process.env.PG_USER,
+  host: process.env.PG_HOST,
+  database: process.env.PG_DATABASE,
+  password: process.env.PG_PASSWORD,
+  port: process.env.PG_PORT,
 });
 
 db.connect();
