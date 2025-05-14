@@ -58,18 +58,18 @@
       <div class="history-content" data-event-id="<%= event.id %>">
         <h2><%= event.event_name %></h2>
         <% if (event.end_date) { %>
-        <p>Completed on <%= event.end_date %></p>
+        <p>completed on <%= event.end_date %></p>
         <% } else if (event.first_donation_date) { %>
-        <p>First donated on <%= event.first_donation_date %></p>
+        <p>first donated on <%= event.first_donation_date %></p>
         <% } %>
-        <p><%= event.additional_notes %></p>
+        <p>desc : <%= event.additional_notes %></p>
         <div class="donation-status">
           <p>
-            Your donation: IDR <%= event.user_donation_amount.toLocaleString()
+            your donation : IDR<%= event.user_donation_amount.toLocaleString()
             %>
           </p>
           <p>
-            Total raised: IDR <%= event.raised_money.toLocaleString() %> / <%=
+            total raised : IDR<%= event.raised_money.toLocaleString() %> / <%=
             event.target_money.toLocaleString() %>
           </p>
         </div>
@@ -99,7 +99,7 @@
         </p>
         <div class="volunteer-status">
           <p>
-            status:
+            status :
             <span class="status-<%= activity.status %>"
               ><%= activity.status.charAt(0).toUpperCase() +
               activity.status.slice(1) %></span
@@ -107,13 +107,13 @@
           </p>
           <% if (activity.status === 'approved' || activity.status ===
           'completed') { %>
-          <p>Contact coordinator: <%= activity.coordinator_email %></p>
+          <p>contact coordinator : <%= activity.coordinator_email %></p>
           <% } %>
         </div>
         <button
           onclick="window.location.href='/event/<%= activity.event_id %>'"
         >
-          View Event
+          view event
         </button>
       </div>
       <% }) %> <% } else { %>

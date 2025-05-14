@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" href="./assets/favicon.ico">
-    <title>user profile - plan with us</title>
+    <title>profile - plan with us</title>
     <link rel="stylesheet" href="./styles/style.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -48,10 +48,9 @@
         <% } %>
       </div>
 
-      <div class="profile-content">
+      <div id="profileView">
         <div class="profile-info">
           <div class="profile-section">
-            <h2>info</h2>
             <div class="info-item">
               <span class="label">name :</span>
               <span class="value"><%= user.name %></span>
@@ -62,10 +61,7 @@
             </div>
             <div class="info-item">
               <span class="label">since :</span>
-              <span class="value"
-                ><%= new Date(user.created_at).toLocaleDateString('en-GB')
-                %></span
-              >
+              <span class="value"><%= new Date(user.created_at).toLocaleDateString('en-GB') %></span>
             </div>
             <% if (user.bank_account) { %>
             <div class="info-item">
@@ -73,83 +69,85 @@
               <span class="value"><%= user.bank_account %></span>
             </div>
             <% } %>
-            <button class="edit-profile-btn" onclick="toggleEditForm()">
-              edit
+             <div class="user-statistics">
+                <div class="stat-item">
+                  <label>my events :</label>
+                  <p class="stat-number"><%= userStats.eventsCreated %></p>
+                </div>
+                <div class="stat-item">
+                  <label>total donated :</label>
+                  <p class="stat-number">IDR <%= userStats.totalDonated.toLocaleString() %></p>
+                </div>
+                <div class="stat-item">
+                  <label>volunteer activites :</label>
+                  <p class="stat-number"><%= userStats.volunteerActivities %></p>
+                </div>
+              </div>
+            </div>
+            <button class="edit-profile-btn" onclick="toggleEditForm()">edit</button>
+          </div>
+        </div>
+
+        <!-- <div class="user-statistics">
+          <div class="stat-item">
+            <label>my events :</label>
+            <p class="stat-number"><%= userStats.eventsCreated %></p>
+          </div>
+          <div class="stat-item">
+            <label>total donated :</label>
+            <p class="stat-number">IDR <%= userStats.totalDonated.toLocaleString() %></p>
+          </div>
+          <div class="stat-item">
+            <label>volunteer activites :</label>
+            <p class="stat-number"><%= userStats.volunteerActivities %></p>
+          </div>
+        </div>
+      </div> -->
+
+      <div class="profile-edit-form" id="profileEditForm" style="display: none">
+        <h2>edit profile</h2>
+        <form action="/profile/update" method="POST">
+          <div class="form-group">
+            <label for="name">name</label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              value="<%= user.name %>"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="email">email</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              value="<%= user.email %>"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="bank_account">bank account</label>
+            <input
+              type="text"
+              id="bank_account"
+              name="bank_account"
+              value="<%= user.bank_account || '' %>"
+              placeholder="releasing fund address"
+            />
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="save-btn">save</button>
+            <button
+              type="button"
+              class="cancel-btn"
+              onclick="toggleEditForm()"
+            >
+              cancel
             </button>
           </div>
-
-          <div
-            class="profile-edit-form"
-            id="profileEditForm"
-            style="display: none"
-          >
-            <h2>edit profile</h2>
-            <form action="/profile/update" method="POST">
-              <div class="form-group">
-                <label for="name">name</label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  value="<%= user.name %>"
-                  required
-                />
-              </div>
-              <div class="form-group">
-                <label for="email">email</label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value="<%= user.email %>"
-                  required
-                />
-              </div>
-              <div class="form-group">
-                <label for="bank_account"
-                  >bank account</label
-                >
-                <input
-                  type="text"
-                  id="bank_account"
-                  name="bank_account"
-                  value="<%= user.bank_account || '' %>"
-                  placeholder="releasing fund address"
-                />
-              </div>
-              <div class="form-actions">
-                <button type="submit" class="save-btn">save</button>
-                <button
-                  type="button"
-                  class="cancel-btn"
-                  onclick="toggleEditForm()"
-                >
-                  cancel
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-
-        <div class="user-statistics">
-          <div class="stat-card">
-            <h3>my events</h3>
-            <p class="stat-number"><%= userStats.eventsCreated %></p>
-            <!-- <a href="/my-events" class="view-all">view all</a> -->
-          </div>
-          <div class="stat-card">
-            <h3>total donated</h3>
-            <p class="stat-number">
-              IDR <%= userStats.totalDonated.toLocaleString() %>
-            </p>
-            <!-- <a href="/history" class="view-all">view history</a> -->
-          </div>
-          <div class="stat-card">
-            <h3>volunteer activities</h3>
-            <p class="stat-number"><%= userStats.volunteerActivities %></p>
-            <!-- <a href="/my-volunteer" class="view-all">view details</a> -->
-          </div>
-        </div>
+        </form>
       </div>
     </section>
 
@@ -171,9 +169,16 @@
 
     <script>
       function toggleEditForm() {
+        const profileView = document.getElementById("profileView");
         const form = document.getElementById("profileEditForm");
-        const currentDisplay = form.style.display;
-        form.style.display = currentDisplay === "none" ? "block" : "none";
+        
+        if (form.style.display === "none") {
+          form.style.display = "block";
+          profileView.style.display = "none";
+        } else {
+          form.style.display = "none";
+          profileView.style.display = "block";
+        }
       }
     </script>
   </body>

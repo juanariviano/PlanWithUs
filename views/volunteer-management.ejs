@@ -40,35 +40,37 @@
       </div>
     </section>
 
-    <div class="profile-menu">
-        <h2>My Account</h2>
-        <ul>
-          <li><a href="/profile">Profile Settings</a></li>
-          <li><a href="/my-events">My Events</a></li>
-          <li><a href="/volunteer-management">Volunteer Management</a></li>
-          <li><a href="/history">Donation & Volunteer History</a></li>
-        </ul>
-      </div>
-
+    <!-- <div class="profile-menu">
+      <h2>My Account</h2>
+      <ul>
+        <li><a href="/profile">Profile Settings</a></li>
+        <li><a href="/my-events">My Events</a></li>
+        <li><a href="/volunteer-management">Volunteer Management</a></li>
+        <li><a href="/history">Donation & Volunteer History</a></li>
+      </ul>
+    </div> -->
+<!-- 
     <section id="management-header">
-      <h1>Volunteer Management</h1>
-      <p>Manage volunteer applications for your events</p>
-    </section>
+      <h2>volunteer management</h2>
+      <p>manage volunteer applications for your events</p>
+    </section> -->
 
     <section id="event-selector">
-      <h2>Select Event</h2>
+      <h2>select event</h2>
       <select id="eventSelector" onchange="loadVolunteers()">
-        <option value="">Choose an event</option>
+        <option value="">choose an event</option>
         <% myEvents.forEach(event => { %>
-          <option value="<%= event.id %>"><%= event.event_name %></option>
+        <option value="<%= event.id %>"><%= event.event_name %></option>
         <% }); %>
       </select>
     </section>
 
     <section id="volunteer-list">
-      <h2>Volunteer Applications</h2>
+      <!-- <h2>volunteer applications</h2> -->
       <div id="volunteer-applications">
-        <p class="select-message">Please select an event to view volunteer applications</p>
+        <p class="select-message">
+          please select an event to view volunteer applications
+        </p>
       </div>
     </section>
 
@@ -84,9 +86,24 @@
           <p class="status"></p>
         </div>
         <div class="volunteer-actions">
-          <button class="approve-btn" onclick="updateVolunteerStatus(this, 'approved')">Approve</button>
-          <button class="reject-btn" onclick="updateVolunteerStatus(this, 'rejected')">Reject</button>
-          <button class="complete-btn" onclick="updateVolunteerStatus(this, 'completed')">Mark as Completed</button>
+          <button
+            class="approve-btn"
+            onclick="updateVolunteerStatus(this, 'approved')"
+          >
+            approve
+          </button>
+          <button
+            class="reject-btn"
+            onclick="updateVolunteerStatus(this, 'rejected')"
+          >
+            reject
+          </button>
+          <button
+            class="complete-btn"
+            onclick="updateVolunteerStatus(this, 'completed')"
+          >
+            mark as completed
+          </button>
         </div>
       </div>
     </template>

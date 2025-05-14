@@ -4,7 +4,7 @@ async function loadVolunteers() {
     const volunteerContainer = document.getElementById('volunteer-applications');
     
     if (!eventId) {
-      volunteerContainer.innerHTML = '<p class="select-message">Please select an event to view volunteer applications</p>';
+      volunteerContainer.innerHTML = '<p class="select-message">please select an event to view volunteer applications</p>';
       return;
     }
     
@@ -24,7 +24,7 @@ async function loadVolunteers() {
         volunteerContainer.innerHTML = '';
         
         if (data.volunteers.length === 0) {
-          volunteerContainer.innerHTML = '<p class="no-volunteers">No volunteer applications found for this event</p>';
+          volunteerContainer.innerHTML = '<p class="no-volunteers">no volunteer applications found for this event</p>';
           return;
         }
         
@@ -70,11 +70,11 @@ async function loadVolunteers() {
           volunteerContainer.appendChild(volunteerCard);
         });
       } else {
-        volunteerContainer.innerHTML = `<p class="error">${data.message || 'Failed to load volunteer applications'}</p>`;
+        volunteerContainer.innerHTML = `<p class="error">${data.message || 'failed to load volunteer applications'}</p>`;
       }
     } catch (error) {
-      console.error('Error loading volunteers:', error);
-      volunteerContainer.innerHTML = '<p class="error">Failed to load volunteer applications</p>';
+      console.error('error loading volunteers:', error);
+      volunteerContainer.innerHTML = '<p class="error">failed to load volunteer applications</p>';
     }
   }
   
@@ -102,7 +102,7 @@ async function loadVolunteers() {
       
       if (data.success) {
         // Update status in UI
-        volunteerCard.querySelector('.status').textContent = `Status: ${newStatus.charAt(0).toUpperCase() + newStatus.slice(1)}`;
+        volunteerCard.querySelector('.status').textContent = `status: ${newStatus.charAt(0).toUpperCase() + newStatus.slice(1)}`;
         volunteerCard.setAttribute('data-status', newStatus);
         
         // Update button visibility
@@ -125,13 +125,13 @@ async function loadVolunteers() {
         }
         
         // Show success message
-        alert(`Volunteer status updated to ${newStatus}`);
+        alert(`volunteer status updated to ${newStatus}`);
       } else {
-        alert(data.message || 'Failed to update volunteer status');
+        alert(data.message || 'failed to update volunteer status');
       }
     } catch (error) {
-      console.error('Error updating volunteer status:', error);
-      alert('Failed to update volunteer status');
+      console.error('error updating volunteer status:', error);
+      alert('failed to update volunteer status');
     }
   }
   

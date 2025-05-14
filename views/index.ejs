@@ -116,8 +116,8 @@
         </div>
         <% if (event.volunteer_needed && event.status === 'active') { %>
         <div class="volunteer-section">
-          <h4>volunteers needed!</h4>
-          <p><%= event.volunteer_description %></p>
+          <h4>volunteers</h4>
+          <p>job desc : <%= event.volunteer_description %></p>
           <p>
             positions:
             <span id="volunteer-count-<%= event.id %>">loading...</span> / 
