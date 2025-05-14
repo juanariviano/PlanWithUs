@@ -86,13 +86,11 @@
         <h2><%= event.event_name %></h2>
         <p><%= event.additional_notes %></p>
 
-        <!-- Progress Bar -->
+        <!-- Progress Bar  -->
         <div class="progress-container">
           <div
             class="progress-bar"
-            style="
-              width: <%= (event.raised_money / event.target_money) * 100 %>%;
-            "
+            style="width: <%=(event.raised_money / event.target_money) * 100 %>%"
           ></div>
         </div>
 
