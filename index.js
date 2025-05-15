@@ -900,6 +900,10 @@ app.get('/volunteer-management', isAuthenticated, (req, res) => {
   res.redirect('/my-events');
 });
 
+app.get("/all-badges", (req, res) => {
+  res.render("all-badges.ejs", { error: null });
+});
+
 // Menjalankan Server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
