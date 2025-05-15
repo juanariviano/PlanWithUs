@@ -8,7 +8,8 @@ import sharp from "sharp";
 import { fileURLToPath } from "url";
 import session from "express-session";
 import bcrypt from "bcrypt";
-import env from "dotenv";
+import dotenv from "dotenv";
+dotenv.config();
 
 // Import file system module
 import { dirname } from 'path';
