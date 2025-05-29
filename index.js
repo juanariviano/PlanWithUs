@@ -314,12 +314,12 @@ app.post(
       );
       const eventCount = result.rows[0].count;
       console.log(eventCount)
-      
-      if(eventCount == 1){
+      const type = "event"
+      if(eventCount == 1 || eventCount == 5){
         console.log('here')
-        res.render('badge.ejs', { eventCount });
+        res.render('badge.ejs', { eventCount, type });
       } else {
-        console.log('not enough man 2')
+        console.log('not enough')
         res.redirect("/");
       }
 

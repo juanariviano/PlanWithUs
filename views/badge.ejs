@@ -20,7 +20,11 @@
         <div class="badge-modal-content">
           <div class="badge-icon-wrapper">
             <div class="badge-level-ring">
-              <img src="assets/badges/1.jpg" alt="">
+              <% if (eventCount == 1) { %>
+                <img src="/assets/badges/3.jpg" alt="Badge for 1 Event">
+              <% } else if (eventCount == 5) { %>
+                <img src="/assets/badges/4.jpg" alt="Badge for 5 Events">
+              <% } %>
             </div>
           </div>
       
@@ -30,7 +34,7 @@
       
           <div class="badge-modal-body">
             <div class="badge-description">
-              You've completed all eco challenges this week. Keep it up!
+              You've completed challenges this week. Keep it up!
             </div>
       
             <div class="badge-meta">
