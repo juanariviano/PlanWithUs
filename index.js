@@ -228,6 +228,7 @@ app.post(
     let proposalFileBuffer = null;
 
     try {
+      console.log("in create")
       // Handle thumbnail photo if uploaded
       if (req.files["thumbnailphoto"]) {
         const thumbnail = req.files["thumbnailphoto"][0];
@@ -304,7 +305,24 @@ app.post(
         ]
       );
 
-      res.redirect("/");
+      const result = await db.query(
+        `SELECT COUNT(e.id)
+         FROM users u
+         JOIN event e ON u.id = e.user_id
+         WHERE u.id = $1`,
+        [req.session.userId] // Assuming you want to use the logged-in user's ID
+      );
+      const eventCount = result.rows[0].count;
+      console.log(eventCount)
+      
+      if(eventCount == 1){
+        console.log('here')
+        res.render('badge.ejs', { eventCount });
+      } else {
+        console.log('not enough man 2')
+        res.redirect("/");
+      }
+
     } catch (err) {
       console.error(err);
       res.status(500).send("Error processing upload and saving to database");
@@ -903,6 +921,10 @@ app.get('/volunteer-management', isAuthenticated, (req, res) => {
 
 app.get("/all-badges", (req, res) => {
   res.render("all-badges.ejs", { error: null });
+});
+
+app.get("/badge", (req, res) => {
+  res.render("badge.ejs", { error: null });
 });
 
 // Menjalankan Server
