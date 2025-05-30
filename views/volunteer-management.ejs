@@ -117,12 +117,47 @@
       <a href="/archive">archive</a>
     </footer>
 
-    <div class="footer-plus">
+    <div id="footer-plus">
       <a href="">privacy policy</a>
       <p>plan with us</p>
     </div>
 
     <script src="./js/script.js"></script>
     <script src="./js/volunteer-management.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        // Element references
+        const bar = document.getElementById('bar');
+        const close = document.getElementById('close');
+        const navbar = document.getElementById('navbar');
+        const body = document.body;
+
+        // Buka navbar
+        if (bar) {
+          bar.addEventListener('click', function(e) {
+            e.stopPropagation();
+            navbar.classList.add('active');
+            body.style.overflow = 'hidden'; // Mencegah scroll
+          });
+        }
+
+        // Tutup navbar
+        if (close) {
+          close.addEventListener('click', function(e) {
+            e.preventDefault();
+            navbar.classList.remove('active');
+            body.style.overflow = ''; // Mengembalikan scroll
+          });
+        }
+      })
+        // Tutup saat klik di luar navbar
+        document.addEventListener('click', function(e) {
+          if (!navbar.contains(e.target) && e.target !== bar) {
+            navbar.classList.remove('active');
+            body.style.overflow = '';
+          }
+        });
+      
+    </script>
   </body>
 </html>

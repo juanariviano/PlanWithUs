@@ -16,6 +16,8 @@
   <body>
     <section id="header">
       <a href="/"><img src="./assets/planwithus.png" alt="logo plan with us" /></a>
+      <!--<div id="bar">☰</div>  Tombol hamburger menu -->
+     
       <div>
         <ul id="navbar">
           <li><a href="/">explore</a></li>
@@ -38,13 +40,16 @@
       </div>
     </section>
 
-    <div class="header1">
+    
+    <div id="header1">
       <h2>create event</h2>
       <p>create your event here!</p>
     </div>
+    
+    
 
     <form action="/create" method="POST" enctype="multipart/form-data">
-      <div class="form">
+      <div id="form">
         <div class="form-style">
           <input type="text" name="eventname" placeholder="event name" required />
           <input type="text" name="coordinatorname" placeholder="coordinator name" required />
@@ -105,24 +110,57 @@
         <a href="/archive">archive</a>
     </footer>
 
-    <div class="footer-plus">
+    <div id="footer-plus">
         <a href="">privacy policy</a>
         <p>plan with us</p>
     </div>
 
     <script src="./js/script.js"></script>
     <script>
-      document.addEventListener('DOMContentLoaded', function() {
+      
+    document.addEventListener('DOMContentLoaded', function() {
+        // Element references
+        const bar = document.getElementById('bar');
+        const close = document.getElementById('close');
+        const navbar = document.getElementById('navbar');
+        const body = document.body;
+
+        // Buka navbar
+        if (bar) {
+          bar.addEventListener('click', function(e) {
+            e.stopPropagation();
+            navbar.classList.add('active');
+            body.style.overflow = 'hidden'; // Mencegah scroll
+          });
+        }
+
+        // Tutup navbar
+        if (close) {
+          close.addEventListener('click', function(e) {
+            e.preventDefault();
+            navbar.classList.remove('active');
+            body.style.overflow = ''; // Mengembalikan scroll
+          });
+        }
+
+        // Tutup saat klik di luar navbar
+        document.addEventListener('click', function(e) {
+          if (!navbar.contains(e.target) && e.target !== bar) {
+            navbar.classList.remove('active');
+            body.style.overflow = '';
+          }
+        });
+
+        // Volunteer checkbox toggle
         const volunteerCheckbox = document.getElementById('volunteer_needed');
         const volunteerDetails = document.getElementById('volunteer-details');
         
-        // Initialize based on initial checkbox state
-        volunteerDetails.style.display = volunteerCheckbox.checked ? 'block' : 'none';
-        
-        // Toggle visibility when checkbox changes
-        volunteerCheckbox.addEventListener('change', function() {
-          volunteerDetails.style.display = this.checked ? 'block' : 'none';
-        });
+        if (volunteerCheckbox && volunteerDetails) {
+          volunteerDetails.style.display = volunteerCheckbox.checked ? 'block' : 'none';
+          volunteerCheckbox.addEventListener('change', function() {
+            volunteerDetails.style.display = this.checked ? 'block' : 'none';
+          });
+        }
       });
     </script>
   </body>

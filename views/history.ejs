@@ -18,7 +18,8 @@
       <a href="/"
         ><img src="./assets/planwithus.png" alt="logo plan with us"
       /></a>
-      <div>
+     
+      <div >
         <ul id="navbar">
           <li><a href="/">explore</a></li>
           <li><a href="/create">create</a></li>
@@ -33,6 +34,7 @@
             </div>
           </li>
           <a href="#" id="close"><img src="./assets/x.png" alt="" /></a>
+          
         </ul>
       </div>
       <div id="mobile">
@@ -78,7 +80,7 @@
         </button>
       </div>
       <% }) %> <% } else { %>
-      <div class="history-content empty-state">
+      <div id="history-content empty-state">
         <h2>no donation history yet</h2>
         <p>
           your donation history will appear here once you make your first
@@ -97,7 +99,7 @@
           applied on <%= new
           Date(activity.created_at).toLocaleDateString('en-GB') %>
         </p>
-        <div class="volunteer-status">
+        <div id="volunteer-status">
           <p>
             status :
             <span class="status-<%= activity.status %>"
@@ -133,30 +135,63 @@
       <a href="/archive">archive</a>
     </footer>
 
-    <div class="footer-plus">
+    <div id="footer-plus">
       <a href="">privacy policy</a>
       <p>plan with us</p>
     </div>
 
     <script src="./js/script.js"></script>
     <script>
-      function openTab(evt, tabName) {
-        // Hide all tab content
-        const tabContents = document.getElementsByClassName("tab-content");
-        for (let i = 0; i < tabContents.length; i++) {
-          tabContents[i].classList.remove("active");
-        }
+  document.addEventListener('DOMContentLoaded', function () {
+    // Element references
+    const bar = document.getElementById('bar');
+    const close = document.getElementById('close');
+    const navbar = document.getElementById('navbar');
+    const body = document.body;
 
-        // Remove active class from all tab buttons
-        const tabButtons = document.getElementsByClassName("tab-button");
-        for (let i = 0; i < tabButtons.length; i++) {
-          tabButtons[i].classList.remove("active");
-        }
+    // Buka navbar
+    if (bar) {
+      bar.addEventListener('click', function (e) {
+        e.stopPropagation();
+        navbar.classList.add('active');
+        body.style.overflow = 'hidden'; // Mencegah scroll
+      });
+    }
 
-        // Show the selected tab content and add active class to the button
-        document.getElementById(tabName).classList.add("active");
-        evt.currentTarget.classList.add("active");
+    // Tutup navbar
+    if (close) {
+      close.addEventListener('click', function (e) {
+        e.preventDefault();
+        navbar.classList.remove('active');
+        body.style.overflow = ''; // Mengembalikan scroll
+      });
+    }
+
+    // Tutup navbar saat klik di luar
+    document.addEventListener('click', function (e) {
+      if (!navbar.contains(e.target) && e.target !== bar && navbar.classList.contains('active')) {
+        navbar.classList.remove('active');
+        body.style.overflow = '';
       }
-    </script>
+    });
+  });
+
+  // Fungsi tab switch — dideklarasikan di luar supaya bisa diakses inline dari HTML
+  function openTab(evt, tabName) {
+    const tabContents = document.getElementsByClassName("tab-content");
+    for (let i = 0; i < tabContents.length; i++) {
+      tabContents[i].classList.remove("active");
+    }
+
+    const tabButtons = document.getElementsByClassName("tab-button");
+    for (let i = 0; i < tabButtons.length; i++) {
+      tabButtons[i].classList.remove("active");
+    }
+
+    document.getElementById(tabName).classList.add("active");
+    evt.currentTarget.classList.add("active");
+  }
+</script>
+
   </body>
 </html>
