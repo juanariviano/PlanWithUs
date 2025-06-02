@@ -892,12 +892,12 @@ app.post('/api/volunteer/update-status', isAuthenticated, async (req, res) => {
 });
 
 // Endpoint untuk mendapatkan daftar event yang dibuat oleh user
-app.get('/my-events', isAuthenticated, async (req, res) => {
+app.get('/my-events-volunteers', isAuthenticated, async (req, res) => {
   const userId = req.session.userId;
   
   try {
     const events = await db.query(
-      'SELECT id, event_name FROM event WHERE user_id = $1 ORDER BY id DESC',
+      'SELECT id, event_name FROM event WHERE user_id = $1 AND volunteer_needed = true ORDER BY id DESC',
       [userId]
     );
     
@@ -914,8 +914,33 @@ app.get('/my-events', isAuthenticated, async (req, res) => {
   }
 });
 
+app.get('/my-events', isAuthenticated, async (req, res) => {
+  const userId = req.session.userId;
+  
+  try {
+    const events = await db.query(
+      'SELECT * FROM event WHERE user_id = $1 ORDER BY id DESC',
+      [userId]
+    );
+    
+    res.render('event-management.ejs', {
+      events: events.rows,
+      user: {
+        id: req.session.userId,
+        name: req.session.userName
+      }
+    });
+  } catch (error) {
+    console.error('Error fetching my events:', error);
+    res.status(500).send('Failed to load events');
+  }
+});
 
 app.get('/volunteer-management', isAuthenticated, (req, res) => {
+  res.redirect('/my-events-volunteers');
+});
+
+app.get('/event-management', isAuthenticated, (req, res) => {
   res.redirect('/my-events');
 });
 
