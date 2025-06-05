@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="./assets/favicon.ico" />
+    <title>plan with us - made for earth</title>
+    <link rel="stylesheet" href="./styles/layout.css" />
+    <link rel="stylesheet" href="./styles/admin.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Quicksand:wght@300..700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="./js/layout.js" defer></script>
+  </head>
+  <body>
+    <section id="header">
+      <a href="/"
+        ><img src="./assets/planwithus.png" alt="logo plan with us"
+      /></a>
+      <div>
+        <ul id="navbar">
+          <li><a href="/">explore</a></li>
+          <li><a href="/create">create</a></li>
+          <li><a href="/history">history</a></li>
+          <li><a href="/archive">archive</a></li>
+          <li class="profile-dropdown">
+            <a href="#" id="profileBtn">profile</a>
+            <div class="dropdown-content">
+              <a href="/profile">my profile</a>
+              <a href="/volunteer-management">volunteer management</a>
+              <a href="/event-management">manage event</a>
+              <a href="/balance">manage event</a>
+              <a href="/logout">logout</a>
+            </div>
+          </li>
+          <a href="#" id="close"><img src="./assets/x.png" alt="" /></a>
+        </ul>
+      </div>
+      <div id="mobile">
+        <i id="bar"><img src="./assets/list.png" alt="" /></i>
+      </div>
+    </section>
+    <div class="card-archive">
+      <% archives.forEach(event => { %>
+        <div class="card-content">
+          <div>
+            <img
+              src="./uploads/<%= event.thumbnail_photo %>"
+              alt="<%= event.name %>"
+            />
+          </div>
+          <div class="money-style">
+            <p><strong>Name:</strong> <%= event.event_name %></p>
+            <p><strong>Raised:</strong> IDR <%= event.raised_money ? event.raised_money.toLocaleString() : "0" %></p>
+            <p><strong>Target:</strong> IDR <%= event.target_money ? event.target_money.toLocaleString() : "0" %></p>
+            <p><strong>Notes:</strong> <%= event.additional_notes || "No additional notes" %></p>
+            <form action="/events/accept/<%= event.id %>" method="POST">
+              <button type="submit">Accept Event</button>
+            </form>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+    
+
+    <footer>
+      <a href="/"
+        ><img src="./assets/planwithus.png" alt="logo plan with us"
+      /></a>
+      <a href="/create">create</a>
+      <a href="/history">history</a>
+      <a href="/archive">archive</a>
+    </footer>
+
+    <div id="footer-plus">
+      <a href="">privacy policy</a>
+      <p>plan with us</p>
+    </div>
+  </body>
+</html>

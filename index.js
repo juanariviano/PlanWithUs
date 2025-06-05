@@ -125,9 +125,13 @@ app.post("/login", async (req, res) => {
     // Set user session
     req.session.userId = user.id;
     req.session.userName = user.name;
+    req.session.userRole = user.role;
 
-    // Redirect ke homepage setelah login berhasil
-    res.redirect("/");
+    if (user.role === "admin") {
+      return res.redirect("/admin-dashboard");
+    } else {
+      return res.redirect("/");
+    }
   } catch (error) {
     console.error("Login error:", error);
     res.render("login.ejs", { error: "Terjadi kesalahan, silahkan coba lagi" });
@@ -196,6 +200,13 @@ app.get("/logout", (req, res) => {
     res.redirect("/login");
   });
 });
+
+function isAdmin(req, res, next) {
+  if (req.session.userRole === "admin") {
+    return next();
+  }
+  res.status(403).send("Access denied. Admins only.");
+}
 
 // Route Utama - Menampilkan Event Aktif (dilindungi auth)
 app.get("/", isAuthenticated, async (req, res) => {
@@ -399,7 +410,8 @@ app.post("/donate", isAuthenticated, async (req, res) => {
       });
     }
 
-    const currentBalance = balanceResult.rows[0].balance || 0;
+    const donationAmount = Number(req.body.donationAmount); // or however it's received
+    const currentBalance = Number(balanceResult.rows[0].balance) || 0;
 
     if (currentBalance < donationAmount) {
       await db.query("ROLLBACK");
@@ -516,6 +528,118 @@ app.post("/update-status", isAuthenticated, async (req, res) => {
   }
 });
 
+// app.post("/events/accept/:id", isAuthenticated, async (req, res) => {
+//   const eventId = req.params.id;
+
+//   try {
+//     await db.query("UPDATE event SET status = 'accepted' WHERE id = $1", [
+//       eventId,
+//     ]);
+//     res.redirect("/admin-dashboard");
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).send("Error updating event status");
+//   }
+// });
+
+app.post("/events/accept/:id", isAdmin, async (req, res) => {
+  const eventId = req.params.id;
+
+  // Explicit check for authenticated user
+  if (!req.session || !req.session.userId) {
+    return res.status(401).json({
+      success: false,
+      message: "You must be logged in to process event income",
+    });
+  }
+
+  try {
+    // Start a transaction
+    await db.query("BEGIN");
+
+    // Verify event exists and get user_id
+    const eventResult = await db.query(
+      `SELECT * FROM event WHERE id = $1`,
+      [eventId]
+    );
+
+    if (eventResult.rows.length === 0) {
+      await db.query("ROLLBACK");
+      return res.status(404).json({
+        success: false,
+        message: "Event not found",
+      });
+    }
+
+    const event = eventResult.rows[0];
+    const user_id = eventResult.user_id;
+
+    // Check if the authenticated user is the event organizer
+    // if (event.user_id !== req.session.userId) {
+    //   await db.query("ROLLBACK");
+    //   return res.status(403).json({
+    //     success: false,
+    //     message: "You are not authorized to process income for this event",
+    //   });
+    // }
+
+    // Insert transaction for event income
+    await db.query(
+      `INSERT INTO user_transactions (
+        user_id,
+        transaction_type,
+        amount,
+        transaction_date,
+        event_id,
+        description
+      )
+      SELECT 
+        user_id,
+        'EVENT_INCOME',
+        $1,
+        NOW(),
+        $2,
+        'Income from event donation'
+      FROM event
+      WHERE id = $2`,
+      [event.raised_money, eventId]
+    );
+    console.log(event.raised_money)
+    const amount = event.raised_money ?? 0;
+
+    // Update user balance
+    const balanceResult = await db.query(
+      `UPDATE users 
+       SET balance = COALESCE(balance, 0) + $1 
+       WHERE id = (SELECT user_id FROM event WHERE id = $2) 
+       RETURNING balance`,
+      [amount, eventId]
+    );
+
+    if (balanceResult.rows.length === 0) {
+      await db.query("ROLLBACK");
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    const user = balanceResult.rows[0];
+
+    await db.query("UPDATE event SET status = 'accepted' WHERE id = $1", [
+      eventId,
+    ]);
+    
+    await db.query("COMMIT");
+    res.redirect("/admin-dashboard");
+  
+  } catch (err) {
+    await db.query("ROLLBACK");
+    console.error(err);
+    res.status(500).send("Error updating event status");
+  }
+});
+
 // Route untuk Melihat Riwayat Event yang Selesai (dilindungi auth)
 app.get("/history", isAuthenticated, async (req, res) => {
   try {
@@ -591,7 +715,7 @@ app.get("/history", isAuthenticated, async (req, res) => {
 app.get("/archive", isAuthenticated, async (req, res) => {
   try {
     const result = await db.query(
-      "SELECT id, event_name AS name, raised_money, thumbnail_photo FROM event WHERE status = 'completed' ORDER BY id DESC"
+      "SELECT id, event_name AS name, raised_money, thumbnail_photo FROM event WHERE status = 'accepted' ORDER BY id DESC"
     );
     res.render("archive.ejs", { archives: result.rows });
   } catch (err) {
@@ -1249,6 +1373,18 @@ app.get("/volunteer-management", isAuthenticated, (req, res) => {
 
 app.get("/event-management", isAuthenticated, (req, res) => {
   res.redirect("/my-events");
+});
+
+app.get("/admin-dashboard", isAdmin, async (req, res) => {
+  try {
+    const result = await db.query(
+      "SELECT * FROM event WHERE status = 'completed' ORDER BY id DESC"
+    );
+    res.render("admin.ejs", { archives: result.rows });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error retrieving data from database");
+  }
 });
 
 app.get("/all-badges", (req, res) => {
