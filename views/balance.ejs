@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="./assets/favicon.ico" />
+    <title>Balance - Plan With Us</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="./styles/layout.css" />
+    <link rel="stylesheet" href="./styles/balance.css" />
+    <script src="./js/layout.js" defer></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Quicksand:wght@300..700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <section id="header">
+      <a href="/"
+        ><img src="./assets/planwithus.png" alt="logo plan with us"
+      /></a>
+      <div>
+        <ul id="navbar">
+          <li><a href="/">explore</a></li>
+          <li><a href="/create">create</a></li>
+          <li><a href="/history">history</a></li>
+          <li><a href="/archive">archive</a></li>
+          <li class="profile-dropdown">
+            <a href="#" id="profileBtn">profile</a>
+            <div class="dropdown-content">
+              <a href="/profile">my profile</a>
+              <a href="/volunteer-management">volunteer management</a>
+              <a href="/event-management">manage event</a>
+              <a href="/logout">logout</a>
+            </div>
+          </li>
+          <a href="#" id="close"><img src="./assets/x.png" alt="" /></a>
+        </ul>
+      </div>
+      <div id="mobile">
+        <i id="bar"><img src="./assets/list.png" alt="" /></i>
+      </div>
+    </section>
+
+    <div class="balance-container">
+      <div class="balance-header">
+        <h1>My Balance</h1>
+        <p>Manage your funds for donations and activities</p>
+      </div>
+
+      <div class="balance-card">
+        <div class="current-balance">
+          <div class="balance-label">Current Balance</div>
+          <div class="balance-amount" id="currentBalance"><%= balance %></div>
+        </div>
+        <div class="balance-actions">
+          <button class="balance-btn" onclick="openTopUpModal()">Top Up</button>
+          <button class="balance-btn secondary" onclick="openWithdrawModal()">
+            Withdraw
+          </button>
+        </div>
+      </div>
+
+      <div class="transaction-section">
+        <div class="transaction-header">
+          <h2>Transaction History</h2>
+          <div class="filter-buttons">
+            <button
+              class="filter-btn active"
+              onclick="filterTransactions('all')"
+            >
+              All
+            </button>
+            <button class="filter-btn" onclick="filterTransactions('income')">
+              Income
+            </button>
+            <button class="filter-btn" onclick="filterTransactions('expense')">
+              Expense
+            </button>
+          </div>
+        </div>
+        <div class="transaction-list" id="transactionList">
+          <!-- transactions populated -->
+        </div>
+      </div>
+    </div>
+
+    <div id="topUpModal" class="modal">
+      <div class="modal-content">
+        <span class="close-btn" onclick="closeModal('topUpModal')"
+          >&times;</span
+        >
+        <div class="modal-header">
+          <h2>Top Up Balance</h2>
+        </div>
+        <form id="topUpForm">
+          <div class="form-group">
+            <label for="topUpAmount">Amount ($)</label>
+            <input
+              type="number"
+              id="topUpAmount"
+              min="1"
+              step="0.01"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="topUpMethod">Payment Method</label>
+            <select id="topUpMethod" required>
+              <option value="">Select payment method</option>
+              <option value="card">Credit/Debit Card</option>
+              <option value="bank">Bank Transfer</option>
+              <option value="paypal">PayPal</option>
+              <option value="crypto">Cryptocurrency</option>
+            </select>
+          </div>
+          <div class="modal-actions">
+            <button
+              type="button"
+              class="balance-btn secondary"
+              onclick="closeModal('topUpModal')"
+            >
+              Cancel
+            </button>
+            <button type="submit" class="balance-btn">Confirm Top Up</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div id="withdrawModal" class="modal">
+      <div class="modal-content">
+        <span class="close-btn" onclick="closeModal('withdrawModal')"
+          >&times;</span
+        >
+        <div class="modal-header">
+          <h2>Withdraw Funds</h2>
+        </div>
+        <form id="withdrawForm">
+          <div class="form-group">
+            <label for="withdrawAmount">Amount ($)</label>
+            <input
+              type="number"
+              id="withdrawAmount"
+              min="1"
+              step="0.01"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="withdrawMethod">Withdrawal Method</label>
+            <select id="withdrawMethod" required>
+              <option value="">Select withdrawal method</option>
+              <option value="bank">Bank Transfer</option>
+              <option value="paypal">PayPal</option>
+              <option value="check">Check</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="withdrawNote">Note (Optional)</label>
+            <input
+              type="text"
+              id="withdrawNote"
+              placeholder="Reason for withdrawal"
+            />
+          </div>
+          <div class="modal-actions">
+            <button
+              type="button"
+              class="balance-btn secondary"
+              onclick="closeModal('withdrawModal')"
+            >
+              Cancel
+            </button>
+            <button type="submit" class="balance-btn">
+              Confirm Withdrawal
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <footer>
+      <a href="/"
+        ><img src="./assets/planwithus.png" alt="logo plan with us"
+      /></a>
+      <a href="/create">create</a>
+      <a href="/history">history</a>
+      <a href="/archive">archive</a>
+    </footer>
+
+    <div id="footer-plus">
+      <a href="">privacy policy</a>
+      <p>plan with us</p>
+    </div>
+    <script>
+      let transactions = <%- JSON.stringify(transactions || []) %>;
+
+      let currentBalance = <%= balance %> || 0;;
+
+      document.addEventListener("DOMContentLoaded", function () {
+        displayTransactions(transactions);
+        updateBalance();
+      });
+
+      function displayTransactions(transactionList) {
+        const container = document.getElementById("transactionList");
+
+        if (transactionList.length === 0) {
+          container.innerHTML =
+            '<p style="text-align: center; color: #AAB396; padding: 40px;">No transactions found</p>';
+          return;
+        }
+
+        container.innerHTML = transactionList
+          .map(
+            (transaction) => `
+          <div class="transaction-item">
+            <div class="transaction-info">
+              <div class="transaction-icon">
+                ${transaction.transaction_type === "EVENT_INCOME" || transaction.transaction_type === "TOP_UP" ? "↑" : "↓"}
+              </div>
+              <div class="transaction-details">
+                <h4>${transaction.description}</h4>
+                <p>${formatDate(transaction.transaction_date)} at ${formatToHHMM(transaction.transaction_date)}</p>
+              </div>
+            </div>
+            <div class="transaction-amount ${
+              transaction.amount > 0 ? "positive" : "negative"
+            }">
+              ${transaction.amount > 0 ? "+" : "-"}$${Math.abs(
+              transaction.amount
+            ).toFixed(2)}
+            </div>
+          </div>
+        `
+          )
+          .join("");
+      }
+
+      function filterTransactions(type) {
+        document
+          .querySelectorAll(".filter-btn")
+          .forEach((btn) => btn.classList.remove("active"));
+        event.target.classList.add("active");
+
+        let filtered = transactions;
+
+        if (type === "income") {
+          filtered = transactions.filter(
+            (t) => t.transaction_type === "TOP_UP" || t.transaction_type === "EVENT_INCOME"
+          );
+        } else if (type === "expense") {
+          filtered = transactions.filter(
+            (t) => t.transaction_type === "WITHDRAWAL" || t.transaction_type === "DONATION"
+          );
+        }
+
+        displayTransactions(filtered);
+      }
+
+
+      function formatDate(dateString) {
+        const date = new Date(dateString);
+        return date.toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+        });
+      }
+      function formatToHHMM(datetimeString) {
+        const isoString = datetimeString.replace(" ", "T");
+        const date = new Date(isoString);
+
+        const hours = date.getHours().toString().padStart(2, "0");
+        const minutes = date.getMinutes().toString().padStart(2, "0");
+
+        return `${hours}:${minutes}`;
+      }
+
+
+      function updateBalance() {
+        document.getElementById(
+          "currentBalance"
+        ).textContent = `$${currentBalance.toFixed(2)}`;
+      }
+
+      function openTopUpModal() {
+        document.getElementById("topUpModal").style.display = "block";
+      }
+
+      function openWithdrawModal() {
+        document.getElementById("withdrawModal").style.display = "block";
+      }
+
+      function closeModal(modalId) {
+        document.getElementById(modalId).style.display = "none";
+        document.getElementById("topUpForm").reset();
+        document.getElementById("withdrawForm").reset();
+      }
+
+      window.onclick = function (event) {
+        if (event.target.classList.contains("modal")) {
+          event.target.style.display = "none";
+        }
+      };
+
+      document
+        .getElementById("topUpForm")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault();
+
+          const amountInput = document.getElementById("topUpAmount");
+          const methodInput = document.getElementById("topUpMethod");
+
+          const amount = parseFloat(amountInput.value);
+          const method = methodInput.value;
+
+          if (!amount || amount <= 0) {
+            alert("Please enter a valid amount");
+            return;
+          }
+          if (!method) {
+            alert("Please select a payment method");
+            return;
+          }
+
+          const submitButton = e.target.querySelector('button[type="submit"]');
+          const originalButtonText = submitButton.textContent;
+          submitButton.disabled = true;
+          submitButton.textContent = "Processing...";
+
+          try {
+            const response = await fetch("/top-up", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ topUpAmount: amount }),
+            });
+
+            const data = await response.json();
+
+            if (response.ok && data.success) {
+              currentBalance = parseFloat(data.balance);
+              updateBalance();
+
+              const newTransaction = {
+                // id: data.transactionId || transactions.length + 1, // Prefer ID from server if available
+                transaction_type: "TOP_UP", // Corrected: Use transaction_type
+                description: "Top-up via bank transfer",
+                amount: amount,
+                transaction_date: new Date().toISOString(), // Corrected: Use transaction_date
+              };
+              // A more robust client-side ID generation if needed (and server doesn't provide one)
+              newTransaction.id = transactions.length > 0 ? Math.max(...transactions.map(t => typeof t.id === 'number' ? t.id : 0)) + 1 : 1;
+
+              transactions.unshift(newTransaction);
+              displayTransactions(transactions);
+
+              closeModal("topUpModal");
+              alert(
+                data.message || `Successfully topped up $${amount.toFixed(2)}!`
+              );
+            } else {
+              alert(data.message || "Top-up failed. Please try again.");
+            }
+          } catch (error) {
+            console.error("Top-up request failed:", error);
+            alert(
+              "An error occurred while trying to top up. Please check your connection and try again."
+            );
+          } finally {
+            submitButton.disabled = false;
+            submitButton.textContent = originalButtonText;
+          }
+        });
+
+      document
+        .getElementById("withdrawForm")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault();
+
+          const amountInput = document.getElementById("withdrawAmount");
+          const methodInput = document.getElementById("withdrawMethod");
+          const noteInput = document.getElementById("withdrawNote");
+
+          const amount = parseFloat(amountInput.value);
+          const method = methodInput.value;
+          const note = noteInput.value;
+
+          if (!amount || amount <= 0) {
+            alert("Please enter a valid amount");
+            return;
+          }
+          if (!method) {
+            alert("Please select a withdrawal method");
+            return;
+          }
+
+          const submitButton = e.target.querySelector('button[type="submit"]');
+          const originalButtonText = submitButton.textContent;
+          submitButton.disabled = true;
+          submitButton.textContent = "Processing...";
+
+          try {
+            const response = await fetch("/withdraw", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ withdrawalAmount: amount }),
+            });
+
+            const data = await response.json();
+
+            if (response.ok && data.success) {
+              currentBalance = parseFloat(data.balance);
+              updateBalance();
+
+              const newTransaction = {
+                // id: data.transactionId || transactions.length + 1, // Prefer ID from server if available
+                transaction_type: "WITHDRAWAL",
+                description: "Withdrawal to bank account",
+                amount: -amount, // Amount should be negative for withdrawal
+                transaction_date: new Date().toISOString(), // Corrected: Use transaction_date and provide full ISO string
+              };
+              // A more robust client-side ID generation if needed
+              newTransaction.id = transactions.length > 0 ? Math.max(...transactions.map(t => typeof t.id === 'number' ? t.id : 0)) + 1 : 1;
+
+              transactions.unshift(newTransaction);
+              displayTransactions(transactions);
+
+              closeModal("withdrawModal");
+              alert(
+                data.message || `Successfully withdrew $${amount.toFixed(2)}!`
+              );
+            } else {
+              alert(data.message || "Withdrawal failed. Please try again.");
+            }
+          } catch (error) {
+            console.error("Withdrawal request failed:", error);
+            alert(
+              "An error occurred while trying to withdraw. Please check your connection and try again."
+            );
+          } finally {
+            submitButton.disabled = false;
+            submitButton.textContent = originalButtonText;
+          }
+        });
+
+      function getMethodName(method) {
+        const methods = {
+          card: "Credit Card",
+          bank: "Bank Transfer",
+          paypal: "PayPal",
+          crypto: "Cryptocurrency",
+          check: "Check",
+        };
+        return methods[method] || method;
+      }
+    </script>
+  </body>
+</html>
