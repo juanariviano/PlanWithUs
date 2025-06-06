@@ -5,6 +5,7 @@
     justify-content: center;
     align-items: center;
     height: 350px;
+    padding: 0 30px;
   }
   
   .first-card h2 {
@@ -23,6 +24,11 @@
     margin-top: 30px;
     padding: 12px 23px;
     border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .first-card button:hover {
+    background-color: #8c9a6e;
   }
   
   .first-card button a {
@@ -34,7 +40,7 @@
   .container-1 {
     display: flex;
     justify-content: center;
-    margin-top: 48px;
+    margin: 36px 0;
     padding: 10px;
     flex-wrap: wrap;
   }
@@ -313,7 +319,7 @@
     padding: 15px 25px;
     width: 220px;
     border: 0;
-    height: 50px;
+    height: 70px;
     /* height: 20px; */
     border: 0;
     background-color: #f7eed3;
@@ -329,7 +335,14 @@
     width: 100px;
     margin-top: 10px;
     /* margin-left: 55px; */
-    align-self: flex-start;
+    /* align-self: flex-start; */
+    border: 0;
+    color: white;
+    cursor: pointer;
+  }
+
+  #volunteerForm > button:hover {
+    background-color: #8c9a6e;
   }
   
   @media (max-width: 768px) {
