@@ -51,6 +51,7 @@ app.use((req, res, next) => {
     ? {
         id: req.session.userId,
         name: req.session.userName,
+        role: req.session.userRole
       }
     : null;
   next();
@@ -764,6 +765,7 @@ app.get("/profile", isAuthenticated, async (req, res) => {
     res.render("profile.ejs", {
       user,
       userStats,
+      role: req.session.userRole,
       message: req.query.message
         ? {
             type: req.query.type || "success",
@@ -1118,6 +1120,7 @@ app.get("/my-events-volunteers", isAuthenticated, async (req, res) => {
       user: {
         id: req.session.userId,
         name: req.session.userName,
+        role: req.session.userRole
       },
     });
   } catch (error) {
@@ -1140,6 +1143,7 @@ app.get("/my-events", isAuthenticated, async (req, res) => {
       user: {
         id: req.session.userId,
         name: req.session.userName,
+        role: req.session.userRole
       },
     });
   } catch (error) {
@@ -1186,6 +1190,7 @@ app.get("/balance", isAuthenticated, async (req, res) => {
       user: {
         id: req.session.userId,
         name: req.session.userName,
+        role: req.session.userRole
       },
     });
   } catch (error) {
@@ -1391,8 +1396,8 @@ app.get("/all-badges", (req, res) => {
   res.render("all-badges.ejs", { error: null });
 });
 
-app.get("/balance", (req, res) => {
-  res.render("balance.ejs", { error: null });
+app.get("/balance", isAuthenticated, (req, res) => {
+  res.render("balance.ejs");
 });
 
 app.get("/badge", (req, res) => {
