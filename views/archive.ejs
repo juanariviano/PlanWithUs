@@ -5,7 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" href="./assets/favicon.ico">
     <title>archive - plan with us</title>
-    <link rel="stylesheet" href="./styles/style.css" />
+    <!-- <link rel="stylesheet" href="./styles/style.css" /> -->
+    <link rel="stylesheet" href="./styles/archive.css" />
+    <link rel="stylesheet" href="./styles/layout.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -28,6 +30,7 @@
               <a href="/profile">my profile</a>
               <a href="/volunteer-management">manage volunteers</a>
               <a href="/event-management">manage event</a>
+              <a href="/balance">balance</a>
               <a href="/logout">logout</a>
             </div>
           </li>
@@ -42,9 +45,7 @@
     <div class="card-archive">
       <% archives.forEach(event => { %>
         <div class="card-content">
-          <div>
-            <img src="./uploads/<%= event.thumbnail_photo %>" alt="<%= event.name %>" />
-          </div>
+          <img src="./uploads/<%= event.thumbnail_photo %>" alt="<%= event.name %>" />
           <div class="money-style">
             <p><%= event.name %></p>
             <p>IDR<%= event.raised_money ? event.raised_money.toLocaleString() : "0" %></p>
@@ -58,48 +59,13 @@
       <a href="/create">create</a>
       <a href="/history">history</a>
       <a href="/archive">archive</a>
-  </footer>
+    </footer>
 
     <div id="footer-plus">
         <a href="">privacy policy</a>
         <p>plan with us</p>
     </div>
 
-    <script src="./js/script.js"></script>
-    <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        // Element references
-        const bar = document.getElementById('bar');
-        const close = document.getElementById('close');
-        const navbar = document.getElementById('navbar');
-        const body = document.body;
-
-        // Buka navbar
-        if (bar) {
-          bar.addEventListener('click', function(e) {
-            e.stopPropagation();
-            navbar.classList.add('active');
-            body.style.overflow = 'hidden'; // Mencegah scroll
-          });
-        }
-
-        // Tutup navbar
-        if (close) {
-          close.addEventListener('click', function(e) {
-            e.preventDefault();
-            navbar.classList.remove('active');
-            body.style.overflow = ''; // Mengembalikan scroll
-          });
-        }
-
-        // Tutup saat klik di luar navbar
-        document.addEventListener('click', function(e) {
-          if (!navbar.contains(e.target) && e.target !== bar) {
-            navbar.classList.remove('active');
-            body.style.overflow = '';
-          }
-        });
-      })
-    </script>
+    <script src="./js/layout.js"></script>
   </body>
 </html>

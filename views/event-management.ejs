@@ -5,7 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" href="./assets/favicon.ico" />
     <title>plan with us - made for earth</title>
-    <link rel="stylesheet" href="./styles/style.css" />
+    <!-- <link rel="stylesheet" href="./styles/style.css" /> -->
+    <link rel="stylesheet" href="./styles/layout.css" />
+    <link rel="stylesheet" href="./styles/home.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -30,6 +32,7 @@
               <a href="/profile">my profile</a>
               <a href="/volunteer-management">manage volunteers</a>
               <a href="/event-management">manage event</a>
+              <a href="/balance">balance</a>
               <a href="/logout">logout</a>
             </div>
           </li>
@@ -43,47 +46,48 @@
 
     <% events.forEach(event => { %>
     <div class="container-1" data-event-id="<%= event.id %>">
-      <div class="c11">
-        <img
-          src="/uploads/<%= event.thumbnail_photo %>"
-          alt="Event Thumbnail"
-          width="491"
-          height="493"
-        />
-      </div>
-      <div class="c12">
-        <h2><%= event.event_name %></h2>
-        <p><%= event.additional_notes %></p>
+      <div class="outer-container">
 
-        <!-- Progress Bar  -->
-        <div class="progress-container">
-          <div
-            class="progress-bar"
-            style="width: <%=(event.raised_money / event.target_money) * 100 %>%"
-          ></div>
+        <div class="c11">
+          <img
+            src="/uploads/<%= event.thumbnail_photo %>"
+            alt="Event Thumbnail"
+          />
         </div>
-
-        <!-- Donation Status -->
-        <div class="donation-info">
-          <p>
-            goal:
-            <span class="raised-amount"><%= event.raised_money || 0 %></span> /
-            <span class="goal-amount"><%= event.target_money %></span>
-          </p>
+        <div class="c12">
+          <h2><%= event.event_name %></h2>
+          <p><%= event.additional_notes %></p>
+  
+          <!-- Progress Bar  -->
+          <div class="progress-container">
+            <div
+              class="progress-bar"
+              style="width: <%=(event.raised_money / event.target_money) * 100 %>%"
+            ></div>
+          </div>
+  
+          <!-- Donation Status -->
+          <div class="donation-info">
+            <p>
+              goal:
+              <span class="raised-amount"><%= event.raised_money || 0 %></span> /
+              <span class="goal-amount"><%= event.target_money %></span>
+            </p>
+          </div>
+  
+  
+          <% if (event.volunteer_needed && event.status === 'active') { %>
+          <div class="volunteer-section">
+            <h4>volunteers</h4>
+            <p>job desc : <%= event.volunteer_description %></p>
+            <p>
+              positions:
+              <span id="volunteer-count-<%= event.id %>">loading...</span> / 
+              <%=event.max_volunteers %>
+            </p>
+          </div>
+          <% } %>
         </div>
-
-
-        <% if (event.volunteer_needed && event.status === 'active') { %>
-        <div class="volunteer-section">
-          <h4>volunteers</h4>
-          <p>job desc : <%= event.volunteer_description %></p>
-          <p>
-            positions:
-            <span id="volunteer-count-<%= event.id %>">loading...</span> / 
-            <%=event.max_volunteers %>
-          </p>
-        </div>
-        <% } %>
       </div>
     </div>
     <% }) %>
@@ -103,42 +107,8 @@
     </div>
 
     <!-- Move your script to the end of body -->
-    <script src="./js/script.js"></script>
+    <script src="./js/layout.js"></script>
     <script>
-
-      document.addEventListener('DOMContentLoaded', function() {
-        // Element references
-        const bar = document.getElementById('bar');
-        const close = document.getElementById('close');
-        const navbar = document.getElementById('navbar');
-        const body = document.body;
-
-        // Buka navbar
-        if (bar) {
-          bar.addEventListener('click', function(e) {
-            e.stopPropagation();
-            navbar.classList.add('active');
-            body.style.overflow = 'hidden'; // Mencegah scroll
-          });
-        }
-
-        // Tutup navbar
-        if (close) {
-          close.addEventListener('click', function(e) {
-            e.preventDefault();
-            navbar.classList.remove('active');
-            body.style.overflow = ''; // Mengembalikan scroll
-          });
-        }
-
-        // Tutup saat klik di luar navbar
-        document.addEventListener('click', function(e) {
-          if (!navbar.contains(e.target) && e.target !== bar) {
-            navbar.classList.remove('active');
-            body.style.overflow = '';
-          }
-        });
-      })
       // Donation handling
       let currentEventId = null;
 
