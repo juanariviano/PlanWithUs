@@ -604,7 +604,7 @@ app.post("/events/accept/:id", isAdmin, async (req, res) => {
       WHERE id = $2`,
       [event.raised_money, eventId]
     );
-    console.log(event.raised_money)
+    // console.log(event.raised_money)
     const amount = event.raised_money ?? 0;
 
     // Update user balance
@@ -624,7 +624,7 @@ app.post("/events/accept/:id", isAdmin, async (req, res) => {
       });
     }
 
-    const user = balanceResult.rows[0];
+    // const user = balanceResult.rows[0];
 
     await db.query("UPDATE event SET status = 'accepted' WHERE id = $1", [
       eventId,

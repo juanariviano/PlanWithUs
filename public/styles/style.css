@@ -1,18 +1,177 @@
 * {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
- body{
-
+body{
   font-family: "Quicksand", serif;
   overflow-x: hidden;
 } 
 
 /* NAVBAR */
+#header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 30px;
+  background-color: #f7eed3;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+#header > a img {
+  height: 40px;
+  width: auto;
+}
+
+#navbar {
+  display: flex;
+  align-items: center;
+  list-style: none;
+}
+
+#navbar li {
+  margin-left: 25px;
+  position: relative;
+}
+
+#navbar li a {
+  text-decoration: none;
+  color: #1a1a1a;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: color 0.3s ease;
+  padding: 5px 0;
+  text-transform: capitalize;
+}
+
+#navbar li a:hover,
+#navbar li a.active-link {
+  color: #674636;
+}
+
+.profile-dropdown .dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #fff;
+  min-width: 220px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  top: 100%;
+  right: 0;
+  border-radius: 4px;
+  padding: 5px 0;
+}
+
+.profile-dropdown:hover .dropdown-content,
+.profile-dropdown .dropdown-content.open {
+  display: block;
+}
+
+#navbar .dropdown-content a {
+  color: black;
+  padding: 10px 15px;
+  text-decoration: none;
+  display: block;
+  white-space: nowrap;
+}
+
+#navbar .dropdown-content a:hover {
+  background-color: #f1f1f1;
+}
+
+#mobile {
+  display: none;
+  align-items: center;
+  cursor: pointer;
+}
+
+#mobile i img {
+  height: 24px;
+  width: auto;
+}
+
+#navbar #close {
+  display: none;
+  position: absolute;
+  top: 25px;
+  right: 30px;
+  cursor: pointer;
+}
+#navbar #close img {
+  height: 20px;
+}
+
+@media (max-width: 769px) {
+  #navbar {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    position: fixed;
+    top: 0;
+    right: -300px;
+    width: 300px;
+    height: 100vh;
+    background-color: #f7eed3;
+    box-shadow: -3px 0 8px rgba(0, 0, 0, 0.15);
+    padding: 80px 0 0 30px;
+    transition: right 0.3s ease-in-out;
+    z-index: 999;
+  }
+
+  #navbar.active {
+    right: 0;
+  }
+
+  #navbar li {
+    margin-left: 0;
+    margin-bottom: 25px;
+    width: 100%;
+  }
+
+  #navbar li a {
+    font-size: 1.1rem;
+  }
+
+  .profile-dropdown .dropdown-content {
+    position: static;
+    box-shadow: none;
+    background-color: transparent;
+    border: none;
+    padding-left: 15px;
+    margin-top: 10px;
+    min-width: unset;
+    display: none;
+  }
+
+  .profile-dropdown .dropdown-content.open {
+    display: block;
+  }
+  .profile-dropdown:hover .dropdown-content {
+    display: block;
+  }
+
+  .dropdown-content a {
+    padding: 8px 0;
+  }
+
+  #mobile {
+    display: flex;
+  }
+
+  #navbar #close {
+    display: block;
+  }
+}
 
 /* navbar untuk tampilan dekstop */
-#header {
+/* #header {
   
   display: flex;
   align-items: center;
@@ -27,9 +186,6 @@
   
 }  
 
-
-
-/* Pengaturan navigation bar */
 #navbar {
   display: flex;
   align-items: center;
@@ -68,22 +224,15 @@
 
 #close {
   display: none;
-}
+} */
 
-
-
-
-/* responsif navbar untuk device ipad   */ 
-@media (max-width: 768px) {
-  
-  /* pengaturan responsif navbar */
-
+/* @media (max-width: 768px) {
   #header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 15px;
-    position: relative; /* Untuk positioning navbar */
+    position: relative;
   }
 
   #navbar {
@@ -137,7 +286,7 @@
   }
 
   #close {
-    display: none; /
+    display: none;
   }
 
   #bar {
@@ -170,14 +319,10 @@
 
   
 
-}
+} */
 
-/* responsif navbar untuk device hp (create page) */
-
-@media (max-width: 480px) {
-  
-  /*pengaturan tulisan navbar */ 
-  #header {
+/* @media (max-width: 480px) {
+    #header {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -235,10 +380,6 @@
     width: 100%;
   }
 
-  /* #close {
-    display: none; 
-  } */
-
   #bar {
     display: block;
     cursor: pointer;
@@ -272,7 +413,7 @@
 
 #header a img {
   width: 100%;
-}
+} */
 
 
 /* pop up */
@@ -620,7 +761,8 @@ input {
   margin : 0 auto;
 }
 
-/* Pengaturan untuk responsivitas footer */
+
+/* footer styling */
 footer {
   display: flex;
   flex-direction: column;
@@ -963,8 +1105,9 @@ footer img {
   margin-top: 10px;
 }
 
+
 @media (max-width: 768px) {
-  #navbar {
+  /* #navbar {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -1005,7 +1148,7 @@ footer img {
     left: 30px;
     color: #222;
     font-size: 24px;
-  }
+  } */
 
   #about-home {
     display: flex;
@@ -1193,7 +1336,10 @@ footer img {
   background-color: #f8d7da;
   color: #721c24;
 }
-.profile-dropdown {
+
+
+/* profile styling */
+/* .profile-dropdown {
   position: relative;
   display: inline-block;
 }
@@ -1235,10 +1381,10 @@ footer img {
   #navbar .profile-dropdown .dropdown-content a {
     padding-left: 30px;
   }
-}
+} */
 
 /* For mobile responsiveness */
-@media (max-width: 799px) {
+/* @media (max-width: 799px) {
   .dropdown-content {
     position: static;
     box-shadow: none;
@@ -1248,7 +1394,7 @@ footer img {
   #navbar .profile-dropdown .dropdown-content a {
     padding-left: 30px;
   }
-}
+} */
 
 /* history tab */
 .history-tabs {
