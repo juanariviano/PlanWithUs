@@ -1,0 +1,258 @@
+/* pengaturan tulisan Create event */
+
+#header1 {
+    color: #674636;
+    width: 90%;
+    max-width: 400px;
+    margin: 40px auto 0 auto;
+    text-align: center;
+    background: white;
+    padding: 30px 20px; 
+    box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    border-radius: 10px;
+  }
+  
+  
+  .header1 h2 {
+    margin-bottom: 25px;
+    color: #674636;
+  }
+  
+  .header1 p {
+    margin-bottom: 10px;
+  }
+  
+  
+  /* Pengaturan untuk pengisian form dan upload-an file */ 
+  #form {
+    width: 90%;
+    max-width: 37.5rem; 
+    margin: 1.875rem auto; 
+    padding: 1.875rem 1.25rem; 
+    background-color: #ffffff;
+    border-radius: 0.625rem; 
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem; 
+    box-sizing: border-box;
+  }
+  
+  /* .form-style {
+    display: flex;
+    flex-direction: row;
+    gap: 1.25rem;
+    flex-wrap: wrap;
+  } */
+  
+  .upload-file {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 0.625rem;
+  }
+  
+  .file-style,
+  .label2 {
+    font-size: 0.875rem;
+    color: #555;
+  }
+  
+  /* .form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 15px;
+  } */
+  
+  .form-style {
+    display: flex;
+    justify-content: center;
+    gap: 80px;
+    margin-bottom: 50px;
+    flex-wrap: wrap;
+  }
+  
+  .form-style input {
+    font-family: "Quicksand", serif;
+    border-radius: 3px;
+    padding: 15px 25px;
+    width: 170px;
+    border: 0;
+    background-color: #f7eed3;
+  }
+  
+  /* .upload-file {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 50px;
+  } */
+  
+  .upload-file input {
+    font-family: "Quicksand", serif;
+    display: none;
+  }
+  
+  .upload-file .file-style {
+    border-radius: 0.1875rem; 
+    padding: 0.5625rem 1.5625rem; 
+    border: 0.0625rem dashed black; 
+    background-color: white;
+    font-size: 0.8125rem; 
+    cursor: pointer;
+  }
+
+  .upload-file .file-style:hover {
+    /* border-color: #674636; */
+    background-color: rgb(247, 238, 211, 0.5);
+    /* background: rgba(74, 144, 226, 0.05);  */
+  }
+  
+  .form-style-2 {
+    display: flex;
+    justify-content: center;
+    gap: 5rem; 
+    margin-bottom: 3.125rem; 
+  }
+  
+  .form-style-2 textarea {
+    font-family: "Quicksand", serif;
+    border-radius: 0.1875rem; 
+    padding: 0.9375rem 1.5625rem; 
+    border: 0;
+    background-color: #f7eed3;
+    width: 29.0625rem; 
+    height: 6.25rem; 
+    resize: none;
+  }
+  
+  .form button {
+    font-family: "Quicksand", serif;
+    border: none;
+    background-color: #aab396;
+    padding: 0.625rem 1.5625rem; 
+    border-radius: 0.1875rem; 
+    color: white;
+  }
+
+  .toggle-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    margin: 10px 0px;
+    margin-bottom: 50px;
+  }
+  
+  .toggle-input {
+    display: none;
+  }
+  
+  .toggle-label {
+    position: relative;
+    width: 50px;
+    height: 25px;
+    background: #ccc;
+    border-radius: 50px;
+    transition: background 0.3s ease-in-out;
+    display: inline-block;
+  }
+  
+  .toggle-label::after {
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: white;
+    border-radius: 50%;
+    top: 50%;
+    left: 3px;
+    transform: translateY(-50%);
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .toggle-input:checked + .toggle-label {
+    background: #4caf50;
+  }
+  
+  .toggle-input:checked + .toggle-label::after {
+    left: calc(100% - 23px);
+  }
+  
+  .toggle-text {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    display: none;
+    transition: opacity 0.3s ease-in-out;
+  }
+  
+  .toggle-container .toggle-text:first-of-type {
+    display: inline;
+  }
+  
+  .toggle-input:checked ~ .toggle-text:first-of-type {
+    display: none;
+  }
+  
+  .toggle-input:checked ~ .toggle-text:last-of-type {
+    display: inline;
+  }
+
+  .form-group-1 {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 50px;
+  }
+
+  .form-group-1 input {
+    font-family: "Quicksand", serif;
+    border-radius: 3px;
+    padding: 15px 25px;
+    width: 170px;
+    border: 0;
+    background-color: #f7eed3;
+  }
+
+  .form-group {
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .description-container {
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  #volunteer_description {
+    font-family: "Quicksand", serif;
+    border-radius: 0.1875rem; 
+    padding: 0.9375rem 1.5625rem; 
+    border: 0;
+    background-color: #f7eed3;
+    width: 100%; 
+    height: 6.25rem; 
+    resize: none;
+  }
+
+  button {
+    background-color: #aab396;
+    border: 0;
+    margin-top: 30px;
+    padding: 12px 23px;
+    border-radius: 5px;
+    cursor: pointer;
+    color: white;
+  }
+
+  button:hover{
+    background-color: #8c9a6e;
+  }

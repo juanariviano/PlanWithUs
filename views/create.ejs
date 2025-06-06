@@ -5,7 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" href="./assets/favicon.ico">
     <title>event - plan with us</title>
-    <link rel="stylesheet" href="./styles/style.css" />
+    <!-- <link rel="stylesheet" href="./styles/style.css" /> -->
+    <link rel="stylesheet" href="./styles/create.css" />
+    <link rel="stylesheet" href="./styles/layout.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -15,21 +17,22 @@
   </head>
   <body>
     <section id="header">
-      <a href="/"><img src="./assets/planwithus.png" alt="logo plan with us" /></a>
-      <!--<div id="bar">☰</div>  Tombol hamburger menu -->
-     
+      <a href="/"
+        ><img src="./assets/planwithus.png" alt="logo plan with us"
+      /></a>
       <div>
         <ul id="navbar">
-          <li><a href="/">explore</a></li>
-          <li><a class="active" href="/create">create</a></li>
+          <li><a class="active" href="/">explore</a></li>
+          <li><a href="/create">create</a></li>
           <li><a href="/history">history</a></li>
           <li><a href="/archive">archive</a></li>
           <li class="profile-dropdown">
-            <a href="#" id="profileBtn">profile</a>
+            <a href="/profile" id="profileBtn">profile</a>
             <div class="dropdown-content">
               <a href="/profile">my profile</a>
               <a href="/volunteer-management">manage volunteers</a>
               <a href="/event-management">manage event</a>
+              <a href="/balance">balance</a>
               <a href="/logout">logout</a>
             </div>
           </li>
@@ -86,7 +89,7 @@
         </div>
         
         <div id="volunteer-details" style="display: none;">
-          <div class="form-group">
+          <div class="description-container">
             <!-- <label for="volunteer_description">volunteer job description</label> -->
             <textarea id="volunteer_description" name="volunteer_description" class="form-control" rows="3" placeholder="describe what volunteers will be doing"></textarea>
           </div>
@@ -116,52 +119,34 @@
         <p>plan with us</p>
     </div>
 
-    <script src="./js/script.js"></script>
+    <script src="./js/layout.js"></script>
     <script>
       
     document.addEventListener('DOMContentLoaded', function() {
-        // Element references
-        const bar = document.getElementById('bar');
-        const close = document.getElementById('close');
-        const navbar = document.getElementById('navbar');
-        const body = document.body;
-
-        // Buka navbar
-        if (bar) {
-          bar.addEventListener('click', function(e) {
-            e.stopPropagation();
-            navbar.classList.add('active');
-            body.style.overflow = 'hidden'; // Mencegah scroll
-          });
-        }
-
-        // Tutup navbar
-        if (close) {
-          close.addEventListener('click', function(e) {
-            e.preventDefault();
-            navbar.classList.remove('active');
-            body.style.overflow = ''; // Mengembalikan scroll
-          });
-        }
-
-        // Tutup saat klik di luar navbar
-        document.addEventListener('click', function(e) {
-          if (!navbar.contains(e.target) && e.target !== bar) {
-            navbar.classList.remove('active');
-            body.style.overflow = '';
+      // Volunteer checkbox toggle
+      const volunteerCheckbox = document.getElementById('volunteer_needed');
+      const volunteerDetails = document.getElementById('volunteer-details');
+      
+      if (volunteerCheckbox && volunteerDetails) {
+        volunteerDetails.style.display = volunteerCheckbox.checked ? 'block' : 'none';
+        volunteerCheckbox.addEventListener('change', function() {
+          volunteerDetails.style.display = this.checked ? 'block' : 'none';
+        });
+      }
+    });
+    const fileInputs = document.querySelectorAll('input[type="file"]');
+      fileInputs.forEach(input => {
+        input.addEventListener('change', function() {
+          const uploadDiv = this.closest('.upload-file');
+          const label = uploadDiv.querySelector('.label2');
+          if (this.files.length > 0) {
+            label.textContent = `Selected: ${this.files[0].name}`;
+            label.style.color = '#674636';
+            label.style.fontWeight = '600';
+            // uploadDiv.style.borderColor = '#4a90e2';
+            // uploadDiv.style.background = 'rgba(74, 144, 226, 0.1)';
           }
         });
-
-        // Volunteer checkbox toggle
-        const volunteerCheckbox = document.getElementById('volunteer_needed');
-        const volunteerDetails = document.getElementById('volunteer-details');
-        
-        if (volunteerCheckbox && volunteerDetails) {
-          volunteerDetails.style.display = volunteerCheckbox.checked ? 'block' : 'none';
-          volunteerCheckbox.addEventListener('change', function() {
-            volunteerDetails.style.display = this.checked ? 'block' : 'none';
-          });
-        }
       });
     </script>
   </body>
