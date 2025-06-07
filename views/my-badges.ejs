@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>My Badges</title>
+    <link rel="stylesheet" href="./styles/layout.css" />
+    <link rel="stylesheet" href="./styles/my-badges.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Quicksand:wght@300..700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <section id="header">
+      <a href="/"
+        ><img src="./assets/planwithus.png" alt="logo plan with us"
+      /></a>
+      <div>
+        <ul id="navbar">
+          <li><a class="active" href="/">explore</a></li>
+          <% if (user && user.role === 'admin') { %>
+          <li><a href="/admin-dashboard">admin</a></li>
+          <% } %>
+          <li><a href="/create">create</a></li>
+          <li><a href="/history">history</a></li>
+          <li><a href="/archive">archive</a></li>
+          <li class="profile-dropdown">
+            <a href="/profile" id="profileBtn">profile</a>
+            <div class="dropdown-content">
+              <a href="/profile">my profile</a>
+              <a href="/volunteer-management">manage volunteers</a>
+              <a href="/event-management">manage event</a>
+              <a href="/balance">balance</a>
+              <a href="/logout">logout</a>
+            </div>
+          </li>
+          <a href="#" id="close"><img src="./assets/x.png" alt="" /></a>
+        </ul>
+      </div>
+      <div id="mobile">
+        <i id="bar"><img src="./assets/list.png" alt="" /></i>
+      </div>
+    </section>
+
+    <div class="layout">
+      <section class="container">
+        <div class="section-header">
+          <h1 class="title">My Badges</h1>
+          <p class="subtitle">
+            Track your earned badges and see your progress on your eco-friendly
+            journey.
+          </p>
+        </div>
+
+        <div class="grid">
+          <% if (userBadges.length > 0) { %> <% userBadges.forEach(badge => { %>
+          <div class="badge-card">
+            <div class="badge-image-container">
+              <div class="icon-container">
+                <img
+                  src="<%= badge.image_url %>"
+                  alt="<%= badge.name %> Badge"
+                />
+              </div>
+            </div>
+            <div class="badge-card-header"><%= badge.name %></div>
+            <div class="badge-card-content"><%= badge.description %></div>
+
+            <div class="badge-earned-date">
+              Earned on: <%= new Date(badge.awarded_at).toLocaleDateString() %>
+            </div>
+          </div>
+          <% }) %> <% } else { %>
+          <div class="no-badges">
+            You haven't earned any badges yet. Start your journey now!
+          </div>
+          <% } %>
+        </div>
+      </section>
+    </div>
+    <footer>
+      <a href="/"
+        ><img src="./assets/planwithus.png" alt="logo plan with us"
+      /></a>
+      <a href="/create">create</a>
+      <a href="/history">history</a>
+      <a href="/archive">archive</a>
+    </footer>
+
+    <div id="footer-plus">
+      <a href="">privacy policy</a>
+      <p>plan with us</p>
+    </div>
+  </body>
+</html>

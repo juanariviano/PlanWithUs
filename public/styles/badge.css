@@ -1,14 +1,9 @@
-
-body {
-  font-family: 'Quicksand', sans-serif;
-}
-
 .badge-modal-backdrop {
   display: flex;
   align-items: center;
   justify-content: center;
-  position: fixed; 
-  z-index: 1000; 
+  position: fixed;
+  z-index: 1000;
   left: 0;
   top: 0;
   width: 100%;
@@ -18,8 +13,8 @@ body {
 }
 
 .badge-modal-content {
-  background: #F7EED3;
-  border: 1px solid #AAB396;
+  background: #f7eed3;
+  border: 1px solid #aab396;
   width: 90%;
   max-width: 400px;
   padding: 2rem 1.5rem;
@@ -30,7 +25,7 @@ body {
 
 .badge-icon-wrapper {
   position: absolute;
-  top: -60px;
+  top: -50px;
   left: 50%;
   transform: translateX(-50%);
 }
@@ -41,7 +36,7 @@ body {
   background: #a3877d;
   padding: 1rem;
   border-radius: 50%;
-  border: 4px solid #F7EED3;
+  border: 4px solid #f7eed3;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   animation: bounce 1s infinite alternate;
 }
@@ -95,7 +90,7 @@ body {
 .badge-meta-divider {
   width: 1px;
   height: 40px;
-  background: #AAB396;
+  background: #aab396;
 }
 
 .badge-action-buttons {
@@ -105,17 +100,18 @@ body {
   margin: 1.5rem 0 0;
 }
 
-.badge-share-button {
-  background: #AAB396;
-  color: #F7EED3;
+.badge-all-button {
+  background: #aab396;
+  color: #f7eed3;
   border: none;
   padding: 0.5rem 1rem;
   border-radius: 6px;
   cursor: pointer;
+  text-decoration: none;
 }
 
 .badge-view-button {
-  border: 1px solid #AAB396;
+  border: 1px solid #aab396;
   color: #674636;
   background: transparent;
   padding: 0.5rem 1rem;
@@ -123,7 +119,19 @@ body {
   cursor: pointer;
 }
 
+.badge-all-button:hover {
+  background: #868f72;
+}
+
+.badge-view-button:hover {
+  background: #cdc4aa;
+}
+
 @keyframes bounce {
-  0% { transform: translateY(0); }
-  100% { transform: translateY(-10px); }
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-10px);
+  }
 }

@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" href="./assets/favicon.ico" />
     <title>volunteer management - plan with us</title>
-    <link rel="stylesheet" href="./styles/style.css" />
-    <link rel="stylesheet" href="./styles/all-badges.css">
+    <link rel="stylesheet" href="./styles/layout.css" />
+    <link rel="stylesheet" href="./styles/all-badges.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -21,16 +21,20 @@
       /></a>
       <div>
         <ul id="navbar">
-          <li><a href="/">explore</a></li>
+          <li><a class="active" href="/">explore</a></li>
+          <% if (user && user.role === 'admin') { %>
+          <li><a href="/admin-dashboard">admin</a></li>
+          <% } %>
           <li><a href="/create">create</a></li>
           <li><a href="/history">history</a></li>
           <li><a href="/archive">archive</a></li>
           <li class="profile-dropdown">
-            <a href="#" id="profileBtn">profile</a>
+            <a href="/profile" id="profileBtn">profile</a>
             <div class="dropdown-content">
               <a href="/profile">my profile</a>
-              <a href="/volunteer-management">volunteer management</a>
+              <a href="/volunteer-management">manage volunteers</a>
               <a href="/event-management">manage event</a>
+              <a href="/balance">balance</a>
               <a href="/logout">logout</a>
             </div>
           </li>
@@ -43,61 +47,115 @@
     </section>
 
     <div class="layout">
-        <section class="container">
-            <div class="text-center section-header">
-                <h1 class="title">Environmental Achievement Badges</h1>
-                <p class="subtitle">
-                    Discover all the badges you can earn by participating in environmental activities and events.
-                    Track your progress and set goals for your eco-friendly journey.
-                </p>
+      <section class="container">
+        <div class="section-header">
+          <h1 class="title">Environmental Achievement Badges</h1>
+          <p class="subtitle">
+            Discover all the badges you can earn by participating in
+            environmental activities and events. Track your progress and set
+            goals for your eco-friendly journey.
+          </p>
+        </div>
+
+        <div class="section-header">
+          <h2>
+            <img
+              src="https://unpkg.com/lucide-static@latest/icons/leaf.svg"
+              alt="Leaf Icon"
+            />
+            Event Badges
+          </h2>
+          <p>Earn these badges by creating your own events!</p>
+        </div>
+
+        <div class="grid">
+          <div class="badge-card">
+            <div class="badge-image-container">
+              <div class="icon-container">
+                <img src="./assets/badges/create_1.jpg" alt="Leaf Icon" />
+              </div>
             </div>
+            <div class="badge-card-header">Seed Sower</div>
+            <div class="badge-card-content">Created their first event.</div>
+          </div>
 
-            <div class="section-header">
-                <h2>
-                    <img src="https://unpkg.com/lucide-static@latest/icons/leaf.svg" alt="Leaf Icon" />
-                    Planting Badges
-                </h2>
-                <p>Earn these badges by participating in tree planting and gardening activities.</p>
+          <div class="badge-card">
+            <div class="badge-image-container">
+              <div class="icon-container">
+                <img src="./assets/badges/create_2.jpg" alt="Sprout Icon" />
+              </div>
             </div>
+            <div class="badge-card-header">Sprout Planner</div>
+            <div class="badge-card-content">Created 5 events.</div>
+          </div>
+        </div>
+        <div class="section-header">
+          <h2>
+            <img
+              src="https://unpkg.com/lucide-static@latest/icons/heart-plus.svg"
+              alt="Leaf Icon"
+            />
+            Supporter Badges
+          </h2>
+          <p>Earn these badges by helping others through donation.</p>
+        </div>
 
-            <div class="grid">
-                <div class="badge-card">
-                    <div class="badge-image-container">
-                        <div class="icon-container">
-                            <img src="./assets/badges/1.jpg" alt="Leaf Icon" />
-                        </div>
-                    </div>
-                    <div class="badge-card-header">Tree Planter</div>
-                    <div class="badge-card-content">
-                        Planted 10 trees in community gardens
-                    </div>
-                </div>
-
-                <div class="badge-card">
-                    <div class="badge-image-container">
-                        <div class="icon-container">
-                            <img src="https://unpkg.com/lucide-static@latest/icons/sprout.svg" alt="Sprout Icon" />
-                        </div>
-                    </div>
-                    <div class="badge-card-header">Urban Gardener</div>
-                    <div class="badge-card-content">
-                        Plant and maintain 5 community garden plots
-                    </div>
-                </div>
-
-                <div class="badge-card">
-                    <div class="badge-image-container">
-                        <div class="icon-container">
-                            <img src="https://unpkg.com/lucide-static@latest/icons/tree-pine.svg" alt="Tree Pine Icon" />
-                        </div>
-                    </div>
-                    <div class="badge-card-header">Forest Guardian</div>
-                    <div class="badge-card-content">
-                        Participate in a forest conservation project
-                    </div>
-                </div>
+        <div class="grid">
+          <div class="badge-card">
+            <div class="badge-image-container">
+              <div class="icon-container">
+                <img src="./assets/badges/donate_1.jpg" alt="Leaf Icon" />
+              </div>
             </div>
-        </section>
+            <div class="badge-card-header">Green Giver</div>
+            <div class="badge-card-content">Donated to their first event.</div>
+          </div>
+
+          <div class="badge-card">
+            <div class="badge-image-container">
+              <div class="icon-container">
+                <img src="./assets/badges/donate_2.jpg" alt="Sprout Icon" />
+              </div>
+            </div>
+            <div class="badge-card-header">Sustainer</div>
+            <div class="badge-card-content">Donate to 5 events.</div>
+          </div>
+        </div>
+        <div class="section-header">
+          <h2>
+            <img
+              src="https://unpkg.com/lucide-static@latest/icons/handshake.svg"
+              alt="Leaf Icon"
+            />
+            Volunteer Badges
+          </h2>
+          <p>Earn these badges volunteering in events.</p>
+        </div>
+
+        <div class="grid">
+          <div class="badge-card">
+            <div class="badge-image-container">
+              <div class="icon-container">
+                <img src="./assets/badges/volunteer_1.jpg" alt="Leaf Icon" />
+              </div>
+            </div>
+            <div class="badge-card-header">First Steps</div>
+            <div class="badge-card-content">
+              Volunteer to their first event.
+            </div>
+          </div>
+
+          <div class="badge-card">
+            <div class="badge-image-container">
+              <div class="icon-container">
+                <img src="./assets/badges/volunteer_2.jpg" alt="Sprout Icon" />
+              </div>
+            </div>
+            <div class="badge-card-header">Community Roots</div>
+            <div class="badge-card-content">Volunteered for 5 events.</div>
+          </div>
+        </div>
+      </section>
     </div>
 
     <footer>
@@ -109,11 +167,11 @@
       <a href="/archive">archive</a>
     </footer>
 
-    <div class="footer-plus">
+    <div id="footer-plus">
       <a href="">privacy policy</a>
       <p>plan with us</p>
     </div>
 
-    <script src="./js/script.js"></script>
+    <script src="./js/layout.js"></script>
   </body>
 </html>

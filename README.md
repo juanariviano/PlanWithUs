@@ -77,7 +77,7 @@ CREATE DATABASE yourdbname;
 \c yourdbname
 
 # Run migration or setup scripts if any
-\i ./path/to/your/setup.sql
+psql -U yourusername -d yourdbname -f 001_create_tables.sql
 ```
 
 Alternatively, if you have ORM migrations (like Sequelize, Knex, or others), mention the commands here.

@@ -51,7 +51,7 @@ app.use((req, res, next) => {
     ? {
         id: req.session.userId,
         name: req.session.userName,
-        role: req.session.userRole
+        role: req.session.userRole,
       }
     : null;
   next();
@@ -249,7 +249,6 @@ app.post(
     let proposalFileBuffer = null;
 
     try {
-      console.log("in create");
       // Handle thumbnail photo if uploaded
       if (req.files["thumbnailphoto"]) {
         const thumbnail = req.files["thumbnailphoto"][0];
@@ -333,14 +332,38 @@ app.post(
          FROM users u
          JOIN event e ON u.id = e.user_id
          WHERE u.id = $1`,
-        [req.session.userId] // Assuming you want to use the logged-in user's ID
+        [req.session.userId]
       );
       const eventCount = result.rows[0].count;
-      console.log(eventCount);
+      // console.log(eventCount);
       const type = "event";
+      //eventCount == 1 || eventCount == 5
       if (eventCount == 1 || eventCount == 5) {
-        console.log("here");
-        res.render("badge.ejs", { eventCount, type });
+        let badgeId;
+        if (eventCount == 1) {
+          badgeId = 1;
+        } else if (eventCount == 5) {
+          badgeId = 2;
+        }
+
+        await db.query(
+          `INSERT INTO user_badges (user_id, badge_id, awarded_at)
+          SELECT $1, $2, NOW()
+          WHERE NOT EXISTS (
+            SELECT 1 FROM user_badges WHERE user_id = $1 AND badge_id = $2
+          )`,
+          [req.session.userId, badgeId]
+        );
+
+        const badgesResult = await db.query(
+          `SELECT * FROM badges WHERE id = $1`,
+          [badgeId]
+        );
+
+        const badgeData = badgesResult.rows[0];
+        console.log(badgeData);
+
+        res.render("badge.ejs", { eventCount, type, badgeData });
       } else {
         console.log("not enough");
         res.redirect("/");
@@ -559,10 +582,9 @@ app.post("/events/accept/:id", isAdmin, async (req, res) => {
     await db.query("BEGIN");
 
     // Verify event exists and get user_id
-    const eventResult = await db.query(
-      `SELECT * FROM event WHERE id = $1`,
-      [eventId]
-    );
+    const eventResult = await db.query(`SELECT * FROM event WHERE id = $1`, [
+      eventId,
+    ]);
 
     if (eventResult.rows.length === 0) {
       await db.query("ROLLBACK");
@@ -630,10 +652,9 @@ app.post("/events/accept/:id", isAdmin, async (req, res) => {
     await db.query("UPDATE event SET status = 'accepted' WHERE id = $1", [
       eventId,
     ]);
-    
+
     await db.query("COMMIT");
     res.redirect("/admin-dashboard");
-  
   } catch (err) {
     await db.query("ROLLBACK");
     console.error(err);
@@ -1120,7 +1141,7 @@ app.get("/my-events-volunteers", isAuthenticated, async (req, res) => {
       user: {
         id: req.session.userId,
         name: req.session.userName,
-        role: req.session.userRole
+        role: req.session.userRole,
       },
     });
   } catch (error) {
@@ -1143,7 +1164,7 @@ app.get("/my-events", isAuthenticated, async (req, res) => {
       user: {
         id: req.session.userId,
         name: req.session.userName,
-        role: req.session.userRole
+        role: req.session.userRole,
       },
     });
   } catch (error) {
@@ -1190,7 +1211,7 @@ app.get("/balance", isAuthenticated, async (req, res) => {
       user: {
         id: req.session.userId,
         name: req.session.userName,
-        role: req.session.userRole
+        role: req.session.userRole,
       },
     });
   } catch (error) {
@@ -1378,6 +1399,25 @@ app.get("/volunteer-management", isAuthenticated, (req, res) => {
 
 app.get("/event-management", isAuthenticated, (req, res) => {
   res.redirect("/my-events");
+});
+
+app.get("/my-badges", isAuthenticated, async (req, res) => {
+  try {
+    const result = await db.query(
+      `SELECT b.*, ub.awarded_at
+       FROM badges b
+       JOIN user_badges ub ON b.id = ub.badge_id
+       WHERE ub.user_id = $1`,
+      [req.session.userId]
+    );
+
+    const userBadges = result.rows;
+
+    res.render("my-badges.ejs", { userBadges });
+  } catch (error) {
+    console.error("Error fetching user badges:", error);
+    res.status(500).send("Something went wrong.");
+  }
 });
 
 app.get("/admin-dashboard", isAdmin, async (req, res) => {
