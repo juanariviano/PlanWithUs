@@ -47,53 +47,57 @@
       </div>
     </section>
 
-    <% events.forEach(event => { %>
-    <div class="container-1" data-event-id="<%= event.id %>">
-      <div class="outer-container">
-
-        <div class="c11">
-          <img
-            src="/uploads/<%= event.thumbnail_photo %>"
-            alt="Event Thumbnail"
-          />
-        </div>
-        <div class="c12">
-          <h2><%= event.event_name %></h2>
-          <p><%= event.additional_notes %></p>
+    <% if (events && events.length > 0) { %>
+      <% events.forEach(event => { %>
+      <div class="container-1" data-event-id="<%= event.id %>">
+        <div class="outer-container">
   
-          <!-- Progress Bar  -->
-          <div class="progress-container">
-            <div
-              class="progress-bar"
-              style="width: <%=(event.raised_money / event.target_money) * 100 %>%"
-            ></div>
+          <div class="c11">
+            <img
+              src="/uploads/<%= event.thumbnail_photo %>"
+              alt="Event Thumbnail"
+            />
           </div>
-  
-          <!-- Donation Status -->
-          <div class="donation-info">
-            <p>
-              goal:
-              <span class="raised-amount"><%= event.raised_money || 0 %></span> /
-              <span class="goal-amount"><%= event.target_money %></span>
-            </p>
+          <div class="c12">
+            <h2><%= event.event_name %></h2>
+            <p><%= event.additional_notes %></p>
+    
+            <div class="progress-container">
+              <div
+                class="progress-bar"
+                style="width: <%=(event.raised_money / event.target_money) * 100 %>%"
+              ></div>
+            </div>
+    
+            <div class="donation-info">
+              <p>
+                goal:
+                <span class="raised-amount"><%= event.raised_money || 0 %></span> /
+                <span class="goal-amount"><%= event.target_money %></span>
+              </p>
+            </div>
+    
+    
+            <% if (event.volunteer_needed && event.status === 'active') { %>
+            <div class="volunteer-section">
+              <h4>volunteers</h4>
+              <p>job desc : <%= event.volunteer_description %></p>
+              <p>
+                positions:
+                <span id="volunteer-count-<%= event.id %>">loading...</span> / 
+                <%=event.max_volunteers %>
+              </p>
+            </div>
+            <% } %>
           </div>
-  
-  
-          <% if (event.volunteer_needed && event.status === 'active') { %>
-          <div class="volunteer-section">
-            <h4>volunteers</h4>
-            <p>job desc : <%= event.volunteer_description %></p>
-            <p>
-              positions:
-              <span id="volunteer-count-<%= event.id %>">loading...</span> / 
-              <%=event.max_volunteers %>
-            </p>
-          </div>
-          <% } %>
         </div>
       </div>
-    </div>
-    <% }) %>
+      <% }) %>
+    <% } else { %>
+      <div class="empty-message-container">
+        <div class="empty-message">You have no events.</div>
+      </div>
+    <% } %>
 
     <footer>
       <a href="/"

@@ -1,92 +1,99 @@
 .card-archive {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 20px;
-    padding: 20px;
-    background-color: #F7EED3;
-    border-radius: 12px;
-    margin: 20px 0;
-  }
-  
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 10px;
+  align-items: center;
+  margin: 20px 0;
+}
+.card-content {
+  display: flex;
+  flex-direction: row;
+  height: 450px;
+  width: 70vw;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.image-container {
+  width: 50%;
+  height: 100%;
+}
+
+.image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.money-style {
+  flex: 1;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: #f7eed3;
+}
+
+.money-style p {
+  margin: 8px 0;
+  font-size: 16px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
+.money-style form {
+  margin-top: 15px;
+}
+
+.money-style button {
+  background-color: #aab396;
+  border: 0;
+  margin-top: 30px;
+  padding: 12px 23px;
+  border-radius: 5px;
+  cursor: pointer;
+  color: white;
+  font-weight: 700;
+}
+
+.money-style button:hover {
+  background-color: #8c9a6e;
+}
+
+@media (max-width: 768px) {
   .card-content {
-    background-color: white;
-    border-radius: 12px;
-    padding: 20px;
-    box-shadow: 0 4px 6px rgba(103, 70, 54, 0.1);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    border: 2px solid #AAB396;
+    flex-direction: column;
+    height: auto;
+    width: 90vw;
   }
-  
-  .card-content:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 15px rgba(103, 70, 54, 0.15);
-  }
-  
-  .card-content img {
+  .image-container {
     width: 100%;
-    height: 200px;
-    object-fit: cover;
-    border-radius: 8px;
-    margin-bottom: 15px;
-    border: 1px solid #AAB396;
+    height: 300px;
   }
-  
   .money-style {
-    color: #674636;
-    font-family: 'Arial', sans-serif;
-  }
-  
-  .money-style p {
-    margin: 10px 0;
-    font-size: 14px;
-    line-height: 1.4;
-  }
-  
-  .money-style p strong {
-    color: #674636;
-    font-weight: 600;
-  }
-  
-  .money-style form {
-    margin-top: 20px;
-  }
-  
-  .money-style button {
-    background-color: #AAB396;
-    color: white;
-    border: none;
-    padding: 12px 24px;
-    border-radius: 25px;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.3s ease;
     width: 100%;
+    height: auto;
+    overflow: visible;
   }
-  
-  .money-style button:hover {
-    background-color: #674636;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 8px rgba(103, 70, 54, 0.2);
-  }
-  
-  .money-style button:active {
-    transform: translateY(0);
-  }
-  
-  /* Responsive design */
-  @media (max-width: 768px) {
-    .card-archive {
-      grid-template-columns: 1fr;
-      padding: 15px;
-      gap: 15px;
-    }
-    
-    .card-content {
-      padding: 15px;
-    }
-    
-    .card-content img {
-      height: 150px;
-    }
-  }
+}
+
+.empty-message-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 90vh;
+}
+
+.empty-message {
+  color: #856404;
+  font-style: italic;
+  font-size: 1.5rem;
+  padding: 20px 40px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(255, 193, 7, 0.5);
+  text-align: center;
+  max-width: 80%;
+}

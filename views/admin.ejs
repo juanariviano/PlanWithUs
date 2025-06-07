@@ -46,27 +46,33 @@
         <i id="bar"><img src="./assets/list.png" alt="" /></i>
       </div>
     </section>
-    <div class="card-archive">
-      <% archives.forEach(event => { %>
-        <div class="card-content">
-          <div>
-            <img
-              src="./uploads/<%= event.thumbnail_photo %>"
-              alt="<%= event.name %>"
-            />
+    <% if (archives && archives.length > 0) { %>
+      <div class="card-archive">
+        <% archives.forEach(event => { %>
+          <div class="card-content">
+            <div class="image-container">
+              <img
+                src="./uploads/<%= event.thumbnail_photo %>"
+                alt="<%= event.name %>"
+              />
+            </div>
+            <div class="money-style">
+              <p><strong>Name:</strong> <%= event.event_name %></p>
+              <p><strong>Raised:</strong> IDR <%= event.raised_money ? event.raised_money.toLocaleString() : "0" %></p>
+              <p><strong>Target:</strong> IDR <%= event.target_money ? event.target_money.toLocaleString() : "0" %></p>
+              <p><strong>Notes:</strong> <%= event.additional_notes || "No additional notes" %></p>
+              <form action="/events/accept/<%= event.id %>" method="POST">
+                <button type="submit">Accept Event</button>
+              </form>
+            </div>
           </div>
-          <div class="money-style">
-            <p><strong>Name:</strong> <%= event.event_name %></p>
-            <p><strong>Raised:</strong> IDR <%= event.raised_money ? event.raised_money.toLocaleString() : "0" %></p>
-            <p><strong>Target:</strong> IDR <%= event.target_money ? event.target_money.toLocaleString() : "0" %></p>
-            <p><strong>Notes:</strong> <%= event.additional_notes || "No additional notes" %></p>
-            <form action="/events/accept/<%= event.id %>" method="POST">
-              <button type="submit">Accept Event</button>
-            </form>
-          </div>
-        </div>
-      <% }) %>
-    </div>
+        <% }) %>
+      </div>
+    <% } else { %>
+      <div class="empty-message-container">
+        <div class="empty-message">No events to be checked.</div>
+      </div>
+    <% } %>
     
 
     <footer>
