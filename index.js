@@ -36,7 +36,7 @@ app.use(express.static("public"));
 // Konfigurasi session
 app.use(
   session({
-    secret: "plantwithus_secret_key", // Ganti dengan secret key yang lebih aman
+    secret: process.env.SESSION_SECRET, // Ganti dengan secret key yang lebih aman
     resave: false,
     saveUninitialized: false,
     cookie: {
