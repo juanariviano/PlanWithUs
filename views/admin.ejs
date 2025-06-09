@@ -61,9 +61,21 @@
               <p><strong>Raised:</strong> IDR <%= event.raised_money ? event.raised_money.toLocaleString() : "0" %></p>
               <p><strong>Target:</strong> IDR <%= event.target_money ? event.target_money.toLocaleString() : "0" %></p>
               <p><strong>Notes:</strong> <%= event.additional_notes || "No additional notes" %></p>
-              <form action="/events/accept/<%= event.id %>" method="POST">
-                <button type="submit">Accept Event</button>
-              </form>
+              <div class="button-section">
+                <% if (event.proof_photo) { %>
+                  <a 
+                    href="/uploads/<%= event.proof_photo %>" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    class="view-proof-button"
+                  >
+                    View Proof
+                  </a>
+                <% } %>
+                <form action="/events/accept/<%= event.id %>" method="POST">
+                  <button type="submit">Accept Event</button>
+                </form>
+              </div>
             </div>
           </div>
         <% }) %>

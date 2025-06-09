@@ -7,7 +7,7 @@
     <title>plan with us - made for earth</title>
     <!-- <link rel="stylesheet" href="./styles/style.css" /> -->
     <link rel="stylesheet" href="./styles/layout.css" />
-    <link rel="stylesheet" href="./styles/home.css" />
+    <link rel="stylesheet" href="./styles/my-events.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -62,12 +62,12 @@
             <h2><%= event.event_name %></h2>
             <p><%= event.additional_notes %></p>
     
-            <div class="progress-container">
+            <!-- <div class="progress-container">
               <div
                 class="progress-bar"
                 style="width: <%=(event.raised_money / event.target_money) * 100 %>%"
               ></div>
-            </div>
+            </div> -->
     
             <div class="donation-info">
               <p>
@@ -77,18 +77,49 @@
               </p>
             </div>
     
-    
             <% if (event.volunteer_needed && event.status === 'active') { %>
             <div class="volunteer-section">
-              <h4>volunteers</h4>
-              <p>job desc : <%= event.volunteer_description %></p>
+              <!-- <h4>volunteers</h4> -->
+              <!-- <p>job desc : <%= event.volunteer_description %></p> -->
               <p>
-                positions:
+                volunteers:
                 <span id="volunteer-count-<%= event.id %>">loading...</span> / 
                 <%=event.max_volunteers %>
               </p>
             </div>
             <% } %>
+            <% if (!event.proof_photo) { %>
+              <form 
+                action="/events/<%= event.id %>/upload-proof" 
+                method="POST" 
+                enctype="multipart/form-data"
+                class="upload-form"
+              >
+                <label class="file-upload-wrapper">
+                  <span class="file-name"><b>Upload your proof</b></span>
+                  <input 
+                    type="file" 
+                    name="proof" 
+                    id="proof-<%= event.id %>" 
+                    accept="image/*" 
+                    required
+                    onchange="document.getElementById('file-name-<%= event.id %>').textContent = this.files[0]?.name || 'No file chosen'"
+                  />
+                  <span class="custom-upload-button">Choose Image</span>
+                  <span class="file-name" id="file-name-<%= event.id %>">No file chosen</span>
+                </label>
+                <button type="submit">Upload</button>
+              </form>
+            <% } else { %>
+              <div class="upload-validation">
+                <p>Proof already uploaded:</p>
+                <img 
+                  src="/uploads/<%= event.proof_photo %>" 
+                  alt="Proof Image" 
+                  style="max-width: 400px; height: auto;"
+                />
+              </div>
+            <% } %>            
           </div>
         </div>
       </div>

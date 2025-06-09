@@ -4,10 +4,10 @@
   box-sizing: border-box;
 }
 
-body{
+body {
   font-family: "Quicksand", serif;
   overflow-x: hidden;
-} 
+}
 
 /* NAVBAR */
 #header {
@@ -415,7 +415,6 @@ body{
   width: 100%;
 } */
 
-
 /* pop up */
 
 .modal {
@@ -757,8 +756,8 @@ input {
   font-size: 17px;
 }
 
-.progress-bar{
-  margin : 0 auto;
+.progress-bar {
+  margin: 0 auto;
 }
 
 footer,
@@ -771,11 +770,13 @@ footer,
 footer {
   background-color: #674636;
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  /* justify-content: space-between; */
   align-items: center;
-  flex-wrap: wrap;
+  /* flex-wrap: wrap; */
   padding-bottom: 20px;
   border-bottom: 1px solid #444;
+  gap: 10px;
 }
 
 footer a {
@@ -835,11 +836,10 @@ footer img {
   margin: 40px auto 0 auto;
   text-align: center;
   background: white;
-  padding: 30px 20px; 
-  box-shadow: 0 0 10px rgba(0,0,0,0.05);
+  padding: 30px 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
   border-radius: 10px;
 }
-
 
 .header1 h2 {
   margin-bottom: 25px;
@@ -850,18 +850,17 @@ footer img {
   margin-bottom: 10px;
 }
 
-
-/* Pengaturan untuk pengisian form dan upload-an file */ 
+/* Pengaturan untuk pengisian form dan upload-an file */
 #form {
   width: 90%;
-  max-width: 37.5rem; 
-  margin: 1.875rem auto; 
-  padding: 1.875rem 1.25rem; 
+  max-width: 37.5rem;
+  margin: 1.875rem auto;
+  padding: 1.875rem 1.25rem;
   background-color: #ffffff;
-  border-radius: 0.625rem; 
+  border-radius: 0.625rem;
   display: flex;
   flex-direction: column;
-  gap: 1.25rem; 
+  gap: 1.25rem;
   box-sizing: border-box;
 }
 
@@ -923,28 +922,28 @@ footer img {
 }
 
 .upload-file .file-style {
-  border-radius: 0.1875rem; 
-  padding: 0.5625rem 1.5625rem; 
-  border: 0.0625rem solid black; 
+  border-radius: 0.1875rem;
+  padding: 0.5625rem 1.5625rem;
+  border: 0.0625rem solid black;
   background-color: white;
-  font-size: 0.8125rem; 
+  font-size: 0.8125rem;
 }
 
 .form-style-2 {
   display: flex;
   justify-content: center;
-  gap: 5rem; 
-  margin-bottom: 3.125rem; 
+  gap: 5rem;
+  margin-bottom: 3.125rem;
 }
 
 .form-style-2 textarea {
   font-family: "Quicksand", serif;
-  border-radius: 0.1875rem; 
-  padding: 0.9375rem 1.5625rem; 
+  border-radius: 0.1875rem;
+  padding: 0.9375rem 1.5625rem;
   border: 0;
   background-color: #f7eed3;
-  width: 29.0625rem; 
-  height: 6.25rem; 
+  width: 29.0625rem;
+  height: 6.25rem;
   resize: none;
 }
 
@@ -952,11 +951,10 @@ footer img {
   font-family: "Quicksand", serif;
   border: none;
   background-color: #aab396;
-  padding: 0.625rem 1.5625rem; 
-  border-radius: 0.1875rem; 
+  padding: 0.625rem 1.5625rem;
+  border-radius: 0.1875rem;
   color: white;
 }
-
 
 /* history */
 
@@ -965,7 +963,7 @@ footer img {
   background-color: #fff8e8;
   align-items: center;
   justify-content: center;
-  height: 9.375rem; 
+  height: 9.375rem;
   color: #674636;
 }
 
@@ -1106,7 +1104,6 @@ footer img {
   justify-content: space-between;
   margin-top: 10px;
 }
-
 
 @media (max-width: 768px) {
   /* #navbar {
@@ -1318,8 +1315,8 @@ footer img {
   align-items: center;
 }
 
-.stat-item h3{
- font-weight: normal;
+.stat-item h3 {
+  font-weight: normal;
 }
 
 /* Alert styling */
@@ -1338,7 +1335,6 @@ footer img {
   background-color: #f8d7da;
   color: #721c24;
 }
-
 
 /* profile styling */
 /* .profile-dropdown {
@@ -1660,3 +1656,35 @@ footer img {
   color: #f44336;
 }
 
+@media (max-width: 768px) {
+  footer {
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  footer a {
+    margin: 10px 0;
+    display: inline-block;
+  }
+
+  #footer-plus p,
+  #footer-plus a {
+    margin: 8px 0;
+  }
+}
+
+@media (max-width: 480px) {
+  footer,
+  #footer-plus {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+  footer a {
+    font-size: 0.95rem;
+  }
+
+  #footer-plus {
+    font-size: 0.85rem;
+  }
+}

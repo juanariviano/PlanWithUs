@@ -45,22 +45,55 @@
 
 
 .money-style form {
-  margin-top: 15px;
+  /* margin-top: 15px; */
 }
 
-.money-style button {
-  background-color: #aab396;
+.button-section {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  /* justify-content: center; */
+  height: 50px;
+  width: 300px;
+  margin-top: 20px;
+}
+
+.view-proof-button{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: normal;
+  text-align: center;
+  text-decoration: none;
+  background-color: #c49b7a;
   border: 0;
-  margin-top: 30px;
   padding: 12px 23px;
   border-radius: 5px;
   cursor: pointer;
   color: white;
   font-weight: 700;
+  font-size: 14px;
+  /* height: 100%; */
 }
 
-.money-style button:hover {
-  background-color: #8c9a6e;
+.view-proof-button:hover {
+  background-color: #a58266;
+}
+
+.button-section form button {
+  background-color: #aab396;
+  border: 0;
+  padding: 12px 23px;
+  border-radius: 5px;
+  cursor: pointer;
+  color: white;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: normal;
+}
+
+.button-section form button:hover {
+  background-color: #9ba587;
 }
 
 @media (max-width: 768px) {

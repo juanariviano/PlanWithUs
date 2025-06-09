@@ -434,7 +434,7 @@ app.post("/donate", isAuthenticated, async (req, res) => {
       });
     }
 
-    const donationAmount = Number(req.body.donationAmount); // or however it's received
+    const donationAmount = Number(req.body.donationAmount);
     const currentBalance = Number(balanceResult.rows[0].balance) || 0;
 
     if (currentBalance < donationAmount) {
@@ -459,7 +459,6 @@ app.post("/donate", isAuthenticated, async (req, res) => {
 
     const donationId = donationResult.rows[0].id;
 
-    // Insert transaction for donation
     await db.query(
       `INSERT INTO user_transactions (
         user_id,
@@ -473,14 +472,13 @@ app.post("/donate", isAuthenticated, async (req, res) => {
       [
         req.session.userId,
         "DONATION",
-        -donationAmount, // Negative amount for expense
+        -donationAmount,
         eventId,
         donationId,
         "Donation to event",
       ]
     );
 
-    // Update user balance
     await db.query(
       `UPDATE users 
        SET balance = COALESCE(balance, 0) - $1 
@@ -488,7 +486,6 @@ app.post("/donate", isAuthenticated, async (req, res) => {
       [donationAmount, req.session.userId]
     );
 
-    // Update event's raised_money
     const eventResult = await db.query(
       `UPDATE event 
        SET raised_money = COALESCE(raised_money, 0) + $1 
@@ -516,15 +513,50 @@ app.post("/donate", isAuthenticated, async (req, res) => {
          WHERE id = $1`,
         [eventId]
       );
-      event.status = "completed"; // Update local event object for response
+      event.status = "completed";
     }
 
     await db.query("COMMIT");
+
+    const result = await db.query(
+      `SELECT COUNT(dh.id)
+       FROM donation_history dh
+       WHERE dh.user_id = $1`,
+      [req.session.userId]
+    );
+    const donationCount = result.rows[0].count;
+    let badgeData = null;
+    if (donationCount == 1 || donationCount == 5) {
+      let badgeId;
+      if (donationCount == 1) {
+        badgeId = 3;
+      } else if (donationCount == 5) {
+        badgeId = 4;
+      }
+
+      await db.query(
+        `INSERT INTO user_badges (user_id, badge_id, awarded_at)
+        SELECT $1, $2, NOW()
+        WHERE NOT EXISTS (
+          SELECT 1 FROM user_badges WHERE user_id = $1 AND badge_id = $2
+        )`,
+        [req.session.userId, badgeId]
+      );
+
+      const badgesResult = await db.query(
+        `SELECT * FROM badges WHERE id = $1`,
+        [badgeId]
+      );
+
+      badgeData = badgesResult.rows[0];
+    }
 
     res.json({
       success: true,
       raised_money: event.raised_money,
       status: event.status,
+      badge_awarded: !!badgeData,
+      badge: badgeData,
       message: "Donation successful",
     });
   } catch (err) {
@@ -1396,6 +1428,54 @@ app.post("/withdraw", isAuthenticated, async (req, res) => {
 app.get("/volunteer-management", isAuthenticated, (req, res) => {
   res.redirect("/my-events-volunteers");
 });
+
+app.post(
+  "/events/:id/upload-proof",
+  isAuthenticated,
+  upload.single("proof"),
+  async (req, res) => {
+    const eventId = req.params.id;
+
+    if (!req.file) {
+      return res.status(400).send("No proof image uploaded.");
+    }
+
+    let proofPath = req.file.filename;
+
+    try {
+      // Resize and save a processed version
+      await sharp(req.file.path)
+        .resize(600) // Resize to width 600px (preserving aspect ratio)
+        .toFile(path.join(__dirname, "uploads", "temp_" + req.file.filename));
+
+      // Overwrite the original file or update reference to temp
+      try {
+        fs.copyFileSync(
+          path.join(__dirname, "uploads", "temp_" + req.file.filename),
+          path.join(__dirname, "uploads", req.file.filename)
+        );
+        fs.unlinkSync(
+          path.join(__dirname, "uploads", "temp_" + req.file.filename)
+        );
+      } catch (err) {
+        console.error("File operation error:", err);
+        proofPath = "temp_" + req.file.filename;
+      }
+
+      // Save file reference to DB
+      await db.query(
+        `UPDATE event SET proof_photo = $1 WHERE id = $2`,
+        [proofPath, eventId]
+      );
+
+      res.send("Proof photo uploaded successfully.");
+    } catch (err) {
+      console.error("Upload error:", err);
+      res.status(500).send("Failed to process and save proof photo.");
+    }
+  }
+);
+
 
 app.get("/event-management", isAuthenticated, (req, res) => {
   res.redirect("/my-events");
