@@ -10,6 +10,8 @@
      <link rel="stylesheet" href="./styles/home.css">
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <link
       href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Quicksand:wght@300..700&display=swap"
       rel="stylesheet"
@@ -301,7 +303,16 @@
 
               // Close modal and show success message
               closeModal();
-              alert("Thank you for your donation!");
+              // alert("Thank you for your donation!");
+              Toastify({
+                text: "Thank you for your donation!",
+                duration: 3000,
+                close: true,
+                gravity: "top",
+                position: "center",
+                backgroundColor: "#4CAF50",
+                stopOnFocus: true
+              }).showToast();
 
               if (data.badge_awarded) {
                 // alert(`You've earned a new badge: ${data.badge.name}`);
@@ -398,14 +409,24 @@
             if (data.success) {
               // Update UI after successful application
               closeVolunteerModal();
-              alert("Thank you for your volunteer application!");
+              // alert("Thank you for your volunteer application!");
+              Toastify({
+                text: "Thank you for your volunteer application!",
+                duration: 3000,
+                close: true,
+                gravity: "top",
+                position: "center",
+                backgroundColor: "#4CAF50",
+                stopOnFocus: true
+              }).showToast();
               console.log(data.badge_awarded)
               if (data.badge_awarded) {
                 console.log('get badge')
                 window.location.href = `/badge/?badge_id=${data.badge_id}`;
               } else {
-
-                window.location.reload();
+                setTimeout(() => {
+                  window.location.reload();
+                }, 2000);
               }
             } else {
               alert("Error: " + (data.message || "An error occurred"));

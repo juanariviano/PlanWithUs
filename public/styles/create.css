@@ -128,14 +128,13 @@
     resize: none;
   }
   
-  .form button {
-    font-family: "Quicksand", serif;
+  /* .form button {
     border: none;
     background-color: #aab396;
     padding: 0.625rem 1.5625rem; 
     border-radius: 0.1875rem; 
     color: white;
-  }
+  } */
 
   .toggle-container {
     display: flex;
@@ -243,7 +242,8 @@
     resize: none;
   }
 
-  button {
+  .submit-button {
+    font-family: "Quicksand", serif;
     background-color: #aab396;
     border: 0;
     margin-top: 30px;
@@ -251,8 +251,9 @@
     border-radius: 5px;
     cursor: pointer;
     color: white;
+    font-weight: 500;
   }
 
-  button:hover{
+  .submit-button:hover{
     background-color: #8c9a6e;
   }

@@ -784,7 +784,7 @@ footer a {
   text-decoration: none;
   margin: 5px 15px;
   transition: color 0.3s ease;
-  text-transform: capitalize;
+  /* text-transform: capitalize; */
 }
 
 footer a:hover {
@@ -1430,6 +1430,7 @@ footer img {
   background-color: white;
   border-radius: 10px;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 40px;
 }
 
 .tab-content.active {
