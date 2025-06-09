@@ -181,6 +181,7 @@
       </div>
     </div>
 
+
     <footer>
       <a href="/"
         ><img src="./assets/planwithus.png" alt="logo plan with us"
@@ -302,9 +303,12 @@
               closeModal();
               alert("Thank you for your donation!");
 
-              // if (data.badge_awarded) {
-              //   alert(`🎉 You've earned a new badge: ${data.badge.name}`);
-              // }
+              if (data.badge_awarded) {
+                // alert(`You've earned a new badge: ${data.badge.name}`);
+                // console.log('is awarded', data.badge_awarded)
+                window.location.href = `/badge/?badge_id=${data.badge_id}`;
+                
+              }
 
 
             } else {
@@ -395,9 +399,14 @@
               // Update UI after successful application
               closeVolunteerModal();
               alert("Thank you for your volunteer application!");
+              console.log(data.badge_awarded)
+              if (data.badge_awarded) {
+                console.log('get badge')
+                window.location.href = `/badge/?badge_id=${data.badge_id}`;
+              } else {
 
-              // Reload the page to update UI
-              window.location.reload();
+                window.location.reload();
+              }
             } else {
               alert("Error: " + (data.message || "An error occurred"));
             }

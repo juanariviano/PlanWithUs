@@ -525,9 +525,8 @@ app.post("/donate", isAuthenticated, async (req, res) => {
       [req.session.userId]
     );
     const donationCount = result.rows[0].count;
-    let badgeData = null;
+    let badgeId = null;
     if (donationCount == 1 || donationCount == 5) {
-      let badgeId;
       if (donationCount == 1) {
         badgeId = 3;
       } else if (donationCount == 5) {
@@ -543,20 +542,19 @@ app.post("/donate", isAuthenticated, async (req, res) => {
         [req.session.userId, badgeId]
       );
 
-      const badgesResult = await db.query(
-        `SELECT * FROM badges WHERE id = $1`,
-        [badgeId]
-      );
+      // const badgesResult = await db.query(
+      //   `SELECT * FROM badges WHERE id = $1`,
+      //   [badgeId]
+      // );
 
-      badgeData = badgesResult.rows[0];
+      // badgeData = badgesResult.rows[0];
     }
-
     res.json({
       success: true,
       raised_money: event.raised_money,
       status: event.status,
-      badge_awarded: !!badgeData,
-      badge: badgeData,
+      badge_awarded: !!badgeId, //ini artinya selalu true
+      badge_id: badgeId,
       message: "Donation successful",
     });
   } catch (err) {
@@ -922,9 +920,35 @@ app.post("/volunteer/apply", isAuthenticated, async (req, res) => {
       [eventId, req.session.userId, name, email, phone, message]
     );
 
+    const result = await db.query(
+      `SELECT COUNT(v.id)
+       FROM volunteers v
+       WHERE v.user_id = $1`,
+      [req.session.userId]
+    );
+    const volunteerAmount = result.rows[0].count;
+    let badgeId = null;
+    if (volunteerAmount == 1 || volunteerAmount == 5) {
+      if (volunteerAmount == 1) {
+        badgeId = 5;
+      } else if (volunteerAmount == 5) {
+        badgeId = 6;
+      }
+
+      await db.query(
+        `INSERT INTO user_badges (user_id, badge_id, awarded_at)
+        SELECT $1, $2, NOW()
+        WHERE NOT EXISTS (
+          SELECT 1 FROM user_badges WHERE user_id = $1 AND badge_id = $2
+        )`,
+        [req.session.userId, badgeId]
+      );
+    }
     res.json({
       success: true,
       message: "Application submitted successfully",
+      badge_awarded: !!badgeId,
+      badge_id: badgeId,
     });
   } catch (err) {
     console.error("Volunteer application error:", err);
@@ -1187,7 +1211,7 @@ app.get("/my-events", isAuthenticated, async (req, res) => {
 
   try {
     const events = await db.query(
-      "SELECT * FROM event WHERE user_id = $1 ORDER BY id DESC",
+      "SELECT * FROM event WHERE user_id = $1 AND status != 'accepted' ORDER BY id DESC",
       [userId]
     );
 
@@ -1429,6 +1453,26 @@ app.get("/volunteer-management", isAuthenticated, (req, res) => {
   res.redirect("/my-events-volunteers");
 });
 
+app.post('/complete-event/:id', async (req, res) => {
+  const eventId = req.params.id;
+
+  try {
+    await db.query(
+      `UPDATE event 
+       SET status = 'completed', 
+           end_date = CURRENT_TIMESTAMP 
+       WHERE id = $1`,
+      [eventId]
+    );
+
+    res.json({ success: true });
+  } catch (error) {
+    console.error("Error updating event:", error);
+    res.json({ success: false, error: error.message });
+  }
+});
+
+
 app.post(
   "/events/:id/upload-proof",
   isAuthenticated,
@@ -1443,12 +1487,10 @@ app.post(
     let proofPath = req.file.filename;
 
     try {
-      // Resize and save a processed version
       await sharp(req.file.path)
-        .resize(600) // Resize to width 600px (preserving aspect ratio)
+        .resize(600)
         .toFile(path.join(__dirname, "uploads", "temp_" + req.file.filename));
 
-      // Overwrite the original file or update reference to temp
       try {
         fs.copyFileSync(
           path.join(__dirname, "uploads", "temp_" + req.file.filename),
@@ -1462,7 +1504,6 @@ app.post(
         proofPath = "temp_" + req.file.filename;
       }
 
-      // Save file reference to DB
       await db.query(
         `UPDATE event SET proof_photo = $1 WHERE id = $2`,
         [proofPath, eventId]
@@ -1520,9 +1561,39 @@ app.get("/balance", isAuthenticated, (req, res) => {
   res.render("balance.ejs");
 });
 
-app.get("/badge", (req, res) => {
-  res.render("badge.ejs", { error: null });
+// app.get("/badge", (req, res) => {
+//   res.render("badge.ejs", { error: null });
+// });
+
+app.get('/badge', async (req, res) => {
+  const badgeId = req.query.badge_id;
+
+  if (!badgeId) {
+    return res.status(400).send('badge_id is required');
+  }
+
+  try {
+    const badgesResult = await db.query(
+      `SELECT * FROM badges WHERE id = $1`,
+      [badgeId]
+    );
+
+    if (badgesResult.rows.length === 0) {
+      return res.status(404).send('Badge not found');
+    }
+
+    const badgeData = badgesResult.rows[0];
+
+    res.render('badge.ejs', {
+      badgeData
+    });
+  } catch (error) {
+    console.error('Database query error:', error);
+    res.status(500).send('Server error');
+  }
 });
+
+
 
 // Menjalankan Server
 app.listen(port, () => {

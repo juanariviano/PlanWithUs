@@ -43,10 +43,10 @@
     color: #674636;
   }
   
-  .container-1 .c12 p {
+  /* .container-1 .c12 p {
     color: black;
     font-size: 16px;
-  }
+  } */
   
   .container-1 .c12 .button-style-main {
     /* background-color: red; */
@@ -407,4 +407,25 @@
   font-weight: 700;
   margin-bottom: 10px;
 }
-  
+
+.view-proof-button{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: normal;
+  text-align: center;
+  text-decoration: none;
+  background-color: #c49b7a;
+  border: 0;
+  padding: 12px 23px;
+  border-radius: 5px;
+  cursor: pointer;
+  color: white;
+  font-weight: 700;
+  font-size: 14px;
+  /* height: 100%; */
+}
+
+.view-proof-button:hover {
+  background-color: #a58266;
+}

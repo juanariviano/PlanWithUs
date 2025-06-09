@@ -47,7 +47,7 @@ body {
   font-weight: 600;
   transition: color 0.3s ease;
   padding: 5px 0;
-  text-transform: capitalize;
+  /* text-transform: capitalize; */
 }
 
 #navbar li a:hover,
