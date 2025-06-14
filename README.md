@@ -1,21 +1,21 @@
-# Project Name
+# Plan With Us
 
-short description of project (in progress)
+Plan With Us is a platform that empowers individuals to launch and support community-driven environmental projects through funding and volunteering.
 
 ---
 
 ## Project Overview
 
-purpose of the project, main functionality, and target users.
+Plan With Us aims to foster grassroots environmental action by connecting individuals with project ideas to those willing to support them. Users can submit environmental project proposals (e.g., cleanups, tree plantings), seek funding or volunteers, and collaborate with others to bring their ideas to life. The platform is designed for environmentally conscious individuals, community organizers, and anyone looking to contribute to sustainable change.
 
 ---
 
 ## Tech Stack
 
-* **Frontend:** EJS (Embedded JavaScript templates)
-* **Backend:** Express.js
-* **Database:** PostgreSQL
-* **Others:** Node.js, npm/yarn, etc.
+- **Frontend:** EJS (Embedded JavaScript templates)
+- **Backend:** Express.js
+- **Database:** PostgreSQL
+- **Others:** Node.js, npm/yarn, etc.
 
 ---
 
@@ -24,16 +24,12 @@ purpose of the project, main functionality, and target users.
 Step-by-step guide to get the project running locally.
 
 ```bash
-# Clone the repo
-git clone https://github.com/yourusername/yourproject.git
+git clone https://github.com/juanariviano/PlanWithUs.git
 
-# Navigate to project directory
-cd yourproject
+cd PlanWithUs
 
-# Install dependencies
 npm install
 
-# Run the app
 npm start
 ```
 
@@ -41,24 +37,52 @@ npm start
 
 ## Configuration
 
-Environment variables or configuration files needed.
-
 Example `.env` file:
 
 ```
-PORT=3000
-DATABASE_URL=postgresql://username:password@localhost:5432/dbname
-SESSION_SECRET=your_secret_key
+# PostgreSQL Configuration
+PG_USER=               # Your PostgreSQL username
+PG_PASSWORD=           # Your PostgreSQL password
+PG_HOST=               # Your database host (e.g., localhost)
+PG_PORT=               # Your PostgreSQL port (commonly 5432)
+PG_DATABASE=           # Your PostgreSQL database name (planwithus)
+
+# Session Configuration
+SESSION_SECRET=        # A secret key for signing sessions
 ```
 
 ---
 
 ## Usage
 
-How to use the app after running it. Include example URLs, features, or commands.
+After starting the application, follow these steps to interact with the platform:
 
-* Open your browser and navigate to `http://localhost:3000`
-* Describe any user interaction or features
+1. **Open your browser** and navigate to:
+   `http://localhost:3000`
+
+2. **Explore the Homepage** and browse existing environmental events.
+
+3. **Create an Event**
+
+   - Click on "create"
+   - Upload your proposal as a PDF
+   - Fill in the event title, description, and required support (funds, volunteers, etc.)
+
+4. **Support an Event**
+
+   - View details of active events
+   - Choose to donate or volunteer
+
+5. **User Account Features**
+
+   - Sign up or log in to track your events
+   - Manage your events and see your transactions
+   - See your impact and get awarded for it
+
+6. **Admin Features** (if applicable)
+
+   - Approve or reject events
+   - Monitor event progress
 
 ---
 
@@ -67,44 +91,22 @@ How to use the app after running it. Include example URLs, features, or commands
 How to set up the PostgreSQL database.
 
 ```bash
-# Access PostgreSQL shell
 psql -U yourusername
 
-# Create database
-CREATE DATABASE yourdbname;
+CREATE DATABASE planwithus;
 
-# Connect to database
-\c yourdbname
+\c planwithus
 
-# Run migration or setup scripts if any
-psql -U yourusername -d yourdbname -f 001_create_tables.sql
-```
+\i migrations/001_create_tables.sql
 
-Alternatively, if you have ORM migrations (like Sequelize, Knex, or others), mention the commands here.
-
----
-
-## Folder Structure
-
-Describe your project folders and files briefly.
-
-```
-/project-root
-  /views          # EJS templates
-  /public         # Static assets (CSS, JS, images)
-  /routes         # Express routes
-  /controllers    # Route logic handlers
-  /models         # Database models or queries
-  /config         # Configuration files
-  app.js          # Main server file
+\i migrations/002_seed_badges.sql
 ```
 
 ---
 
 ## Features
 
-* User authentication (if applicable)
-* CRUD operations
-* Form handling with EJS
-* Session management
-* etc.
+- User authentication (if applicable)
+- CRUD operations
+- Form handling with EJS
+- Session management

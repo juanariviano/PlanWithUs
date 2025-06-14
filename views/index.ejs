@@ -62,12 +62,12 @@
         <h3>donation settings</h3>
         <div class="donation-content">
           <div class="donation-content2">
-            <label>payment</label>
+            <!-- <label>payment</label>
             <select id="paymentMethod">
               <option value="Bank Transfer">bank transfer</option>
               <option value="e-Wallet">e-wallet</option>
               <option value="Credit Card">credit card</option>
-            </select>
+            </select> -->
             <label>idr</label>
             <input
               type="number"
@@ -257,7 +257,7 @@
           .getElementById("donationModal")
           .getAttribute("data-event-id");
         const amount = document.getElementById("donationAmount").value;
-        const paymentMethod = document.getElementById("paymentMethod").value;
+        // const paymentMethod = document.getElementById("paymentMethod").value;
 
         if (!amount || amount <= 0) {
           alert("Please enter a valid donation amount");
@@ -273,7 +273,7 @@
           body: JSON.stringify({
             eventId: eventId,
             donationAmount: amount,
-            paymentMethod: paymentMethod,
+            // paymentMethod: paymentMethod,
           }),
         })
           .then((response) => response.json())

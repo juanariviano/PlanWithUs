@@ -54,7 +54,7 @@
   align-items: center;
   /* justify-content: center; */
   height: 50px;
-  width: 300px;
+  width: 400px;
   margin-top: 20px;
 }
 
@@ -90,11 +90,30 @@
   font-weight: 700;
   font-size: 14px;
   line-height: normal;
+  text-transform: lowercase;
 }
 
 .button-section form button:hover {
   background-color: #9ba587;
 }
+
+.reject-btn {
+  background-color: #DA6C6C;
+  border: 0;
+  padding: 12px 23px;
+  border-radius: 5px;
+  cursor: pointer;
+  color: white;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: normal;
+  text-transform: lowercase;
+}
+
+.reject-btn:hover {
+  background-color: #b45050;
+}
+
 
 @media (max-width: 768px) {
   .card-content {
