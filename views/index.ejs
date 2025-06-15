@@ -94,7 +94,7 @@
           <h2><%= event.event_name %></h2>
           <p><%= event.additional_notes %></p>
   
-          <!-- Progress Bar  -->
+          
           <div class="progress-container">
             <div
               class="progress-bar"
@@ -102,7 +102,7 @@
             ></div>
           </div>
   
-          <!-- Donation Status -->
+          
           <div class="donation-info">
             <p>
               goal:
@@ -111,7 +111,7 @@
             </p>
           </div>
   
-          <!-- Donation Button -->
+          
           <div class="button-style-main">
             <button type="button" onclick="openModal('<%= event.id %>')">
               donate
@@ -198,12 +198,12 @@
       <p>plan with us</p>
     </div>
 
-    <!-- Move your script to the end of body -->
+    
     <script src="./js/script.js"></script>
     <script>
 
       document.addEventListener('DOMContentLoaded', function() {
-        // Element references
+        
         const bar = document.getElementById('bar');
         const close = document.getElementById('close');
         const navbar = document.getElementById('navbar');
@@ -214,7 +214,7 @@
           bar.addEventListener('click', function(e) {
             e.stopPropagation();
             navbar.classList.add('active');
-            body.style.overflow = 'hidden'; // Mencegah scroll
+            body.style.overflow = 'hidden';
           });
         }
 
@@ -223,11 +223,11 @@
           close.addEventListener('click', function(e) {
             e.preventDefault();
             navbar.classList.remove('active');
-            body.style.overflow = ''; // Mengembalikan scroll
+            body.style.overflow = '';
           });
         }
 
-        // Tutup saat klik di luar navbar
+        
         document.addEventListener('click', function(e) {
           if (!navbar.contains(e.target) && e.target !== bar) {
             navbar.classList.remove('active');
@@ -235,10 +235,10 @@
           }
         });
       })
-      // Donation handling
+      
       let currentEventId = null;
 
-      // Donation Modal Functions
+      
       function openModal(eventId) {
         currentEventId = eventId;
         const donationModal = document.getElementById("donationModal");
@@ -248,7 +248,7 @@
 
       function closeModal() {
         document.getElementById("donationModal").style.display = "none";
-        // Reset donation amount field
+        
         document.getElementById("donationAmount").value = "";
       }
 
@@ -264,7 +264,7 @@
           return;
         }
 
-        // Send donation to server
+        
         fetch("/donate", {
           method: "POST",
           headers: {
@@ -279,7 +279,7 @@
           .then((response) => response.json())
           .then((data) => {
             if (data.success) {
-              // Update UI with new donation amount
+              
               const container = document.querySelector(
                 `.container-1[data-event-id="${eventId}"]`
               );
@@ -288,7 +288,7 @@
                 if (raisedElement) {
                   raisedElement.textContent = data.raised_money;
 
-                  // Update progress bar
+                  
                   const goalAmount = parseFloat(
                     container.querySelector(".goal-amount").textContent
                   );
@@ -301,7 +301,7 @@
                 }
               }
 
-              // Close modal and show success message
+              
               closeModal();
               // alert("Thank you for your donation!");
               Toastify({
@@ -332,7 +332,7 @@
           });
       }
 
-      // Make sure modal closes when clicking outside
+      
       window.onclick = function (event) {
         const modal = document.getElementById("donationModal");
         if (event.target == modal) {
@@ -345,7 +345,7 @@
         }
       };
 
-      // Volunteer Modal Functions
+      
       let currentVolunteerEventId = null;
 
       function openVolunteerModal(eventId) {
@@ -356,7 +356,7 @@
 
       function closeVolunteerModal() {
         document.getElementById("volunteerModal").style.display = "none";
-        // Reset form fields
+        
         document.getElementById("volunteerForm").reset();
       }
 
@@ -407,7 +407,7 @@
           .then((data) => {
             console.log("Success response:", data);
             if (data.success) {
-              // Update UI after successful application
+              
               closeVolunteerModal();
               // alert("Thank you for your volunteer application!");
               Toastify({
@@ -438,7 +438,7 @@
           });
       }
 
-      // Load volunteer counts on page load
+      
       document.addEventListener("DOMContentLoaded", function () {
         const volunteerCountElements = document.querySelectorAll(
           '[id^="volunteer-count-"]'
@@ -447,13 +447,13 @@
         volunteerCountElements.forEach((element) => {
           const eventId = element.id.split("-").pop();
 
-          // Fetch volunteer count for this event
+          
           fetch(`/volunteer/count/${eventId}`)
             .then((response) => response.json())
             .then((data) => {
               element.textContent = data.currentCount || 0;
 
-              // Check if event is full and update button
+              
               if (data.isFull) {
                 const btn = document.getElementById(`volunteer-btn-${eventId}`);
                 if (btn) {

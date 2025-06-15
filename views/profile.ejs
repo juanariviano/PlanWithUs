@@ -174,31 +174,31 @@
 
     <script>
      document.addEventListener('DOMContentLoaded', function () {
-    // Element references
+    
     const bar = document.getElementById('bar');
     const close = document.getElementById('close');
     const navbar = document.getElementById('navbar');
     const body = document.body;
 
-    // Buka navbar
+    
     if (bar) {
       bar.addEventListener('click', function (e) {
         e.stopPropagation();
         navbar.classList.add('active');
-        body.style.overflow = 'hidden'; // Mencegah scroll
+        body.style.overflow = 'hidden';
       });
     }
 
-    // Tutup navbar
+    
     if (close) {
       close.addEventListener('click', function (e) {
         e.preventDefault();
         navbar.classList.remove('active');
-        body.style.overflow = ''; // Mengembalikan scroll
+        body.style.overflow = '';
       });
     }
 
-    // Tutup saat klik di luar navbar
+    
     document.addEventListener('click', function (e) {
       if (!navbar.contains(e.target) && e.target !== bar) {
         navbar.classList.remove('active');
@@ -207,7 +207,7 @@
     });
   });
 
-  // Toggle form edit profile
+  
   function toggleEditForm() {
     const profileView = document.getElementById("profileView");
     const form = document.getElementById("profileEditForm");

@@ -1,4 +1,4 @@
-// Fungsi untuk memuat data volunteer berdasarkan event ID
+
 async function loadVolunteers() {
     const eventId = document.getElementById('eventSelector').value;
     const volunteerContainer = document.getElementById('volunteer-applications');
@@ -20,7 +20,7 @@ async function loadVolunteers() {
       const data = await response.json();
       
       if (data.success) {
-        // Clear container
+        
         volunteerContainer.innerHTML = '';
         
         if (data.volunteers.length === 0) {
@@ -28,14 +28,14 @@ async function loadVolunteers() {
           return;
         }
         
-        // Get template
+        
         const template = document.getElementById('volunteer-card-template');
         
-        // Clone and populate template for each volunteer
+       
         data.volunteers.forEach(volunteer => {
           const volunteerCard = document.importNode(template.content, true);
           
-          // Fill in volunteer data
+         
           volunteerCard.querySelector('.volunteer-name').textContent = volunteer.name;
           volunteerCard.querySelector('.volunteer-email').textContent = `Email: ${volunteer.email}`;
           volunteerCard.querySelector('.volunteer-phone').textContent = `Phone: ${volunteer.phone}`;
@@ -43,12 +43,12 @@ async function loadVolunteers() {
           volunteerCard.querySelector('.application-date').textContent = `Applied: ${new Date(volunteer.created_at).toLocaleDateString()}`;
           volunteerCard.querySelector('.status').textContent = `Status: ${volunteer.status.charAt(0).toUpperCase() + volunteer.status.slice(1)}`;
           
-          // Set data attribute for volunteer ID
+          
           const card = volunteerCard.querySelector('.volunteer-card');
           card.setAttribute('data-volunteer-id', volunteer.id);
           card.setAttribute('data-status', volunteer.status);
           
-          // Show/hide buttons based on current status
+          
           const approveBtn = volunteerCard.querySelector('.approve-btn');
           const rejectBtn = volunteerCard.querySelector('.reject-btn');
           const completeBtn = volunteerCard.querySelector('.complete-btn');
@@ -78,7 +78,7 @@ async function loadVolunteers() {
     }
   }
   
-  // Fungsi untuk memperbarui status volunteer
+  
   async function updateVolunteerStatus(button, newStatus) {
     const volunteerCard = button.closest('.volunteer-card');
     const volunteerId = volunteerCard.getAttribute('data-volunteer-id');
@@ -101,11 +101,11 @@ async function loadVolunteers() {
       const data = await response.json();
       
       if (data.success) {
-        // Update status in UI
+        
         volunteerCard.querySelector('.status').textContent = `status: ${newStatus.charAt(0).toUpperCase() + newStatus.slice(1)}`;
         volunteerCard.setAttribute('data-status', newStatus);
         
-        // Update button visibility
+        
         const approveBtn = volunteerCard.querySelector('.approve-btn');
         const rejectBtn = volunteerCard.querySelector('.reject-btn');
         const completeBtn = volunteerCard.querySelector('.complete-btn');
@@ -124,7 +124,7 @@ async function loadVolunteers() {
           completeBtn.style.display = 'none';
         }
         
-        // Show success message
+       
         alert(`volunteer status updated to ${newStatus}`);
       } else {
         alert(data.message || 'failed to update volunteer status');
@@ -135,7 +135,7 @@ async function loadVolunteers() {
     }
   }
   
-  // Load volunteers when the page loads (if event is selected)
+
   document.addEventListener('DOMContentLoaded', function() {
     const eventSelector = document.getElementById('eventSelector');
     if (eventSelector.value) {

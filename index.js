@@ -11,7 +11,7 @@ import bcrypt from "bcrypt";
 import dotenv from "dotenv";
 dotenv.config();
 
-// Import file system module
+
 import { dirname } from "path";
 
 const app = express();
@@ -33,19 +33,19 @@ app.use(bodyParser.json());
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use(express.static("public"));
 
-// Konfigurasi session
+
 app.use(
   session({
-    secret: process.env.SESSION_SECRET, // Ganti dengan secret key yang lebih aman
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     cookie: {
-      maxAge: 24 * 60 * 60 * 1000, // 24 jam
+      maxAge: 24 * 60 * 60 * 1000,
     },
   })
 );
 
-// Make user data available in all views
+
 app.use((req, res, next) => {
   res.locals.user = req.session.userId
     ? {
@@ -57,13 +57,13 @@ app.use((req, res, next) => {
   next();
 });
 
-// Pastikan folder uploads/ ada
+
 const uploadDir = path.join(process.cwd(), "uploads");
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir);
 }
 
-// Koneksi Database
+
 const db = new pg.Client({
   user: process.env.PG_USER,
   host: process.env.PG_HOST,
@@ -74,7 +74,7 @@ const db = new pg.Client({
 
 db.connect();
 
-// Middleware untuk memeriksa autentikasi
+
 function isAuthenticated(req, res, next) {
   if (req.session && req.session.userId) {
     return next();
@@ -82,13 +82,12 @@ function isAuthenticated(req, res, next) {
   res.redirect("/login");
 }
 
-// Konfigurasi Multer untuk Upload Thumbnail & Proposal
+
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "uploads/");
   },
   filename: function (req, file, cb) {
-    // Just generate the filename here, we'll handle resizing after upload
     const fileName = Date.now() + path.extname(file.originalname);
     cb(null, fileName);
   },
@@ -96,34 +95,34 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-// Route untuk Login
+
 app.get("/login", (req, res) => {
   res.render("login.ejs", { error: null });
 });
 
-// Proses Login
+
 app.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // Cari user berdasarkan email
+    
     const result = await db.query("SELECT * FROM users WHERE email = $1", [
       email,
     ]);
     const user = result.rows[0];
 
-    // Jika user tidak ditemukan
+    
     if (!user) {
       return res.render("login.ejs", { error: "Email atau password salah" });
     }
 
-    // Verifikasi password
+    
     const validPassword = await bcrypt.compare(password, user.password);
     if (!validPassword) {
       return res.render("login.ejs", { error: "Email atau password salah" });
     }
 
-    // Set user session
+    
     req.session.userId = user.id;
     req.session.userName = user.name;
     req.session.userRole = user.role;
@@ -139,17 +138,17 @@ app.post("/login", async (req, res) => {
   }
 });
 
-// Route untuk Register
+
 app.get("/register", (req, res) => {
   res.render("register.ejs", { error: null });
 });
 
-// Proses Register
+
 app.post("/register", async (req, res) => {
   try {
     const { name, email, password, confirm_password } = req.body;
 
-    // Validasi input dasar
+    
     if (!name || !email || !password) {
       return res.render("register.ejs", { error: "Semua field harus diisi" });
     }
@@ -158,7 +157,7 @@ app.post("/register", async (req, res) => {
       return res.render("register.ejs", { error: "Password tidak cocok" });
     }
 
-    // Cek apakah email sudah digunakan
+    
     const existingUser = await db.query(
       "SELECT * FROM users WHERE email = $1",
       [email]
@@ -167,21 +166,21 @@ app.post("/register", async (req, res) => {
       return res.render("register.ejs", { error: "Email sudah terdaftar" });
     }
 
-    // Hash password
+    
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    // Insert new user
+    
     const newUser = await db.query(
       "INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING *",
       [name, email, hashedPassword]
     );
 
-    // Set user session
+    
     req.session.userId = newUser.rows[0].id;
     req.session.userName = newUser.rows[0].name;
 
-    // Redirect ke homepage setelah register berhasil
+    
     res.redirect("/");
   } catch (error) {
     console.error("Register error:", error);
@@ -191,7 +190,7 @@ app.post("/register", async (req, res) => {
   }
 });
 
-// Logout route
+
 app.get("/logout", (req, res) => {
   req.session.destroy((err) => {
     if (err) {
@@ -209,7 +208,7 @@ function isAdmin(req, res, next) {
   res.status(403).send("Access denied. Admins only.");
 }
 
-// Route Utama - Menampilkan Event Aktif (dilindungi auth)
+
 app.get("/", isAuthenticated, async (req, res) => {
   try {
     const result = await db.query(
@@ -222,12 +221,11 @@ app.get("/", isAuthenticated, async (req, res) => {
   }
 });
 
-// Route untuk Membuat Event Baru (dilindungi auth)
+
 app.get("/create", isAuthenticated, (req, res) => {
   res.render("create.ejs");
 });
 
-// **POST Request untuk Membuat Event Baru dengan Upload** (dilindungi auth)
 app.post(
   "/create",
   isAuthenticated,
@@ -249,52 +247,44 @@ app.post(
     let proposalFileBuffer = null;
 
     try {
-      // Handle thumbnail photo if uploaded
+      
       if (req.files["thumbnailphoto"]) {
         const thumbnail = req.files["thumbnailphoto"][0];
         thumbnailPath = thumbnail.filename;
 
-        // Process the image using sharp but save directly with the original filename
+        
         await sharp(thumbnail.path)
           .resize(491, 493)
           .toFile(
             path.join(__dirname, "uploads", "temp_" + thumbnail.filename)
           );
 
-        // Wait a moment to ensure file operations are complete
         await new Promise((resolve) => setTimeout(resolve, 100));
 
-        // Try to replace the file using copyFile instead of unlink/rename
         try {
           fs.copyFileSync(
             path.join(__dirname, "uploads", "temp_" + thumbnail.filename),
             path.join(__dirname, "uploads", thumbnail.filename)
           );
 
-          // Delete the temp file
           fs.unlinkSync(
             path.join(__dirname, "uploads", "temp_" + thumbnail.filename)
           );
         } catch (err) {
           console.error("File operation error:", err);
-          // If we can't replace, just use the temp file
           thumbnailPath = "temp_" + thumbnail.filename;
         }
       }
 
-      // Handle proposal file if uploaded
       if (req.files["file"]) {
         proposalPath = req.files["file"][0].path;
         proposalFileBuffer = fs.readFileSync(proposalPath);
       }
 
-      // Convert volunteer_needed to boolean
       const needsVolunteers = volunteer_needed === "on";
 
-      // Set max_volunteers to 0 if volunteers not needed
       const maxVolunteers = needsVolunteers ? max_volunteers || 0 : 0;
 
-      // Insert into database with user_id
       await db.query(
         `INSERT INTO event (
           event_name, 
@@ -335,9 +325,7 @@ app.post(
         [req.session.userId]
       );
       const eventCount = result.rows[0].count;
-      // console.log(eventCount);
       const type = "event";
-      //eventCount == 1 || eventCount == 5
       if (eventCount == 1 || eventCount == 5) {
         let badgeId;
         if (eventCount == 1) {
@@ -375,7 +363,6 @@ app.post(
   }
 );
 
-// Route untuk Mengunduh Proposal PDF (dilindungi auth)
 app.get("/download/:id", isAuthenticated, async (req, res) => {
   const { id } = req.params;
 
@@ -398,7 +385,6 @@ app.get("/download/:id", isAuthenticated, async (req, res) => {
 });
 
 app.post("/donate", isAuthenticated, async (req, res) => {
-  // Explicit check for authenticated user
   if (!req.session || !req.session.userId) {
     return res.status(401).json({
       success: false,
@@ -408,7 +394,6 @@ app.post("/donate", isAuthenticated, async (req, res) => {
 
   const { eventId, donationAmount } = req.body;
 
-  // Validate donationAmount and eventId
   if (!eventId || !donationAmount || donationAmount <= 0) {
     return res.status(400).json({
       success: false,
@@ -417,10 +402,8 @@ app.post("/donate", isAuthenticated, async (req, res) => {
   }
 
   try {
-    // Start a transaction
     await db.query("BEGIN");
 
-    // Check if user has sufficient balance
     const balanceResult = await db.query(
       "SELECT balance FROM users WHERE id = $1",
       [req.session.userId]
@@ -445,7 +428,6 @@ app.post("/donate", isAuthenticated, async (req, res) => {
       });
     }
 
-    // Insert donation record
     const donationResult = await db.query(
       `INSERT INTO donation_history (
         event_id,
@@ -504,7 +486,6 @@ app.post("/donate", isAuthenticated, async (req, res) => {
 
     const event = eventResult.rows[0];
 
-    // If target reached, update status and end_date
     if (event.raised_money >= event.target_money) {
       await db.query(
         `UPDATE event 
@@ -542,18 +523,12 @@ app.post("/donate", isAuthenticated, async (req, res) => {
         [req.session.userId, badgeId]
       );
 
-      // const badgesResult = await db.query(
-      //   `SELECT * FROM badges WHERE id = $1`,
-      //   [badgeId]
-      // );
-
-      // badgeData = badgesResult.rows[0];
     }
     res.json({
       success: true,
       raised_money: event.raised_money,
       status: event.status,
-      badge_awarded: !!badgeId, //ini artinya selalu true
+      badge_awarded: !!badgeId,
       badge_id: badgeId,
       message: "Donation successful",
     });
@@ -567,7 +542,6 @@ app.post("/donate", isAuthenticated, async (req, res) => {
   }
 });
 
-// Route untuk Mengubah Status Event ke Completed (dilindungi auth)
 app.post("/update-status", isAuthenticated, async (req, res) => {
   const { eventId } = req.body;
 
@@ -599,7 +573,7 @@ app.post("/update-status", isAuthenticated, async (req, res) => {
 app.post("/events/accept/:id", isAdmin, async (req, res) => {
   const eventId = req.params.id;
 
-  // Explicit check for authenticated user
+  
   if (!req.session || !req.session.userId) {
     return res.status(401).json({
       success: false,
@@ -608,10 +582,10 @@ app.post("/events/accept/:id", isAdmin, async (req, res) => {
   }
 
   try {
-    // Start a transaction
+    
     await db.query("BEGIN");
 
-    // Verify event exists and get user_id
+    
     const eventResult = await db.query(`SELECT * FROM event WHERE id = $1`, [
       eventId,
     ]);
@@ -627,7 +601,6 @@ app.post("/events/accept/:id", isAdmin, async (req, res) => {
     const event = eventResult.rows[0];
     const user_id = eventResult.user_id;
 
-    // Check if the authenticated user is the event organizer
     // if (event.user_id !== req.session.userId) {
     //   await db.query("ROLLBACK");
     //   return res.status(403).json({
@@ -636,7 +609,6 @@ app.post("/events/accept/:id", isAdmin, async (req, res) => {
     //   });
     // }
 
-    // Insert transaction for event income
     await db.query(
       `INSERT INTO user_transactions (
         user_id,
@@ -657,10 +629,9 @@ app.post("/events/accept/:id", isAdmin, async (req, res) => {
       WHERE id = $2`,
       [event.raised_money, eventId]
     );
-    // console.log(event.raised_money)
     const amount = event.raised_money ?? 0;
 
-    // Update user balance
+    
     const balanceResult = await db.query(
       `UPDATE users 
        SET balance = COALESCE(balance, 0) + $1 
@@ -677,7 +648,7 @@ app.post("/events/accept/:id", isAdmin, async (req, res) => {
       });
     }
 
-    // const user = balanceResult.rows[0];
+    
 
     await db.query("UPDATE event SET status = 'accepted' WHERE id = $1", [
       eventId,
@@ -692,10 +663,9 @@ app.post("/events/accept/:id", isAdmin, async (req, res) => {
   }
 });
 
-// Route untuk Melihat Riwayat Event yang Selesai (dilindungi auth)
 app.get("/history", isAuthenticated, async (req, res) => {
   try {
-    // Query for donation history
+    
     const donationResult = await db.query(
       `
       SELECT 
@@ -717,7 +687,7 @@ app.get("/history", isAuthenticated, async (req, res) => {
       [req.session.userId]
     );
 
-    // Format dates untuk tampilan
+    
     const historyEvents = donationResult.rows.map((event) => ({
       ...event,
       end_date: event.end_date
@@ -728,7 +698,7 @@ app.get("/history", isAuthenticated, async (req, res) => {
         : null,
     }));
 
-    // Query for volunteer activities
+    
     const volunteerResult = await db.query(
       `
       SELECT 
@@ -754,7 +724,7 @@ app.get("/history", isAuthenticated, async (req, res) => {
     });
   } catch (err) {
     console.error(err);
-    // Jika terjadi error, tetap render halaman dengan array kosong
+    
     res.render("history.ejs", {
       historyEvents: [],
       volunteerActivities: [],
@@ -763,7 +733,7 @@ app.get("/history", isAuthenticated, async (req, res) => {
   }
 });
 
-// Route untuk Arsip Event yang Selesai (dilindungi auth)
+
 app.get("/archive", isAuthenticated, async (req, res) => {
   try {
     const result = await db.query(
@@ -776,10 +746,10 @@ app.get("/archive", isAuthenticated, async (req, res) => {
   }
 });
 
-// Route for User Profile
+
 app.get("/profile", isAuthenticated, async (req, res) => {
   try {
-    // Fetch user data
+    
     const userResult = await db.query(
       "SELECT id, name, email, created_at, bank_account FROM users WHERE id = $1",
       [req.session.userId]
@@ -791,7 +761,7 @@ app.get("/profile", isAuthenticated, async (req, res) => {
 
     const user = userResult.rows[0];
 
-    // Get user statistics
+    
     const eventsCreatedResult = await db.query(
       "SELECT COUNT(*) as count FROM event WHERE user_id = $1",
       [req.session.userId]
@@ -832,12 +802,11 @@ app.get("/profile", isAuthenticated, async (req, res) => {
   }
 });
 
-// Route for updating user profile
+
 app.post("/profile/update", isAuthenticated, async (req, res) => {
   try {
     const { name, email, bank_account } = req.body;
 
-    // Check if email exists for another user
     if (email) {
       const existingEmail = await db.query(
         "SELECT id FROM users WHERE email = $1 AND id != $2",
@@ -849,13 +818,13 @@ app.post("/profile/update", isAuthenticated, async (req, res) => {
       }
     }
 
-    // Update user information
+  
     await db.query(
       "UPDATE users SET name = $1, email = $2, bank_account = $3 WHERE id = $4",
       [name, email, bank_account, req.session.userId]
     );
 
-    // Update session name if changed
+
     if (name !== req.session.userName) {
       req.session.userName = name;
     }
@@ -867,12 +836,12 @@ app.post("/profile/update", isAuthenticated, async (req, res) => {
   }
 });
 
-// Route for volunteer application
+
 app.post("/volunteer/apply", isAuthenticated, async (req, res) => {
   const { eventId, name, email, phone, message } = req.body;
 
   try {
-    // Check if user already applied
+  
     const existingApplication = await db.query(
       "SELECT * FROM volunteers WHERE event_id = $1 AND user_id = $2",
       [eventId, req.session.userId]
@@ -885,7 +854,7 @@ app.post("/volunteer/apply", isAuthenticated, async (req, res) => {
       });
     }
 
-    // Check if max volunteers reached
+    
     const volunteerCount = await db.query(
       "SELECT COUNT(*) as count FROM volunteers WHERE event_id = $1 AND status IN ('pending', 'approved')",
       [eventId]
@@ -913,7 +882,7 @@ app.post("/volunteer/apply", isAuthenticated, async (req, res) => {
       });
     }
 
-    // Insert volunteer application
+   
     await db.query(
       `INSERT INTO volunteers (event_id, user_id, name, email, phone, message, status) 
        VALUES ($1, $2, $3, $4, $5, $6, 'pending')`,
@@ -959,7 +928,7 @@ app.post("/volunteer/apply", isAuthenticated, async (req, res) => {
   }
 });
 
-// Route for getting volunteer count
+
 app.get("/volunteer/count/:eventId", async (req, res) => {
   const { eventId } = req.params;
 
@@ -1000,7 +969,7 @@ app.get("/volunteer/count/:eventId", async (req, res) => {
   }
 });
 
-// Route for checking user volunteer status
+
 app.get("/volunteer/status/:eventId", isAuthenticated, async (req, res) => {
   const { eventId } = req.params;
 
@@ -1028,7 +997,7 @@ app.get("/volunteer/status/:eventId", isAuthenticated, async (req, res) => {
   }
 });
 
-// Route for viewing my volunteer activities
+
 app.get("/my-volunteer", isAuthenticated, async (req, res) => {
   try {
     const volunteerActivities = await db.query(
@@ -1051,15 +1020,13 @@ app.get("/my-volunteer", isAuthenticated, async (req, res) => {
   }
 });
 
-// Contoh implementasi untuk Express.js
 
-// Mendapatkan daftar volunteer untuk suatu event
+
 app.get("/api/volunteers/:eventId", isAuthenticated, async (req, res) => {
   const { eventId } = req.params;
   const userId = req.session.userId;
 
   try {
-    // Periksa apakah user adalah pembuat event
     const event = await db.query(
       "SELECT * FROM event WHERE id = $1 AND user_id = $2",
       [eventId, userId]
@@ -1072,7 +1039,6 @@ app.get("/api/volunteers/:eventId", isAuthenticated, async (req, res) => {
       });
     }
 
-    // Ambil daftar volunteer untuk event ini
     const volunteers = await db.query(
       `SELECT v.id, v.name, v.email, v.phone, v.message, v.status, v.created_at 
        FROM volunteers v 
@@ -1094,12 +1060,10 @@ app.get("/api/volunteers/:eventId", isAuthenticated, async (req, res) => {
   }
 });
 
-// Endpoint untuk memperbarui status volunteer
 app.post("/api/volunteer/update-status", isAuthenticated, async (req, res) => {
   const { volunteerId, eventId, status } = req.body;
   const userId = req.session.userId;
 
-  // Validasi input
   if (!volunteerId || !eventId || !status) {
     return res.status(400).json({
       success: false,
@@ -1107,7 +1071,6 @@ app.post("/api/volunteer/update-status", isAuthenticated, async (req, res) => {
     });
   }
 
-  // Validasi status yang diizinkan
   const allowedStatuses = ["pending", "approved", "rejected", "completed"];
   if (!allowedStatuses.includes(status)) {
     return res.status(400).json({
@@ -1117,7 +1080,6 @@ app.post("/api/volunteer/update-status", isAuthenticated, async (req, res) => {
   }
 
   try {
-    // Periksa apakah user adalah pembuat event
     const event = await db.query(
       "SELECT * FROM event WHERE id = $1 AND user_id = $2",
       [eventId, userId]
@@ -1130,7 +1092,6 @@ app.post("/api/volunteer/update-status", isAuthenticated, async (req, res) => {
       });
     }
 
-    // Periksa apakah volunteer yang diupdate ada dan terkait dengan event yang benar
     const volunteer = await db.query(
       "SELECT * FROM volunteers WHERE id = $1 AND event_id = $2",
       [volunteerId, eventId]
@@ -1143,21 +1104,17 @@ app.post("/api/volunteer/update-status", isAuthenticated, async (req, res) => {
       });
     }
 
-    // Update status volunteer
     await db.query(
       "UPDATE volunteers SET status = $1, updated_at = NOW() WHERE id = $2",
       [status, volunteerId]
     );
 
-    // Jika status berubah menjadi approved, tambahkan informasi contact coordinator
     if (status === "approved") {
-      // Ambil email pembuat event
       const creatorEmail = await db.query(
         "SELECT email FROM users WHERE id = $1",
         [userId]
       );
 
-      // Update coordinator_email dalam tabel volunteers
       if (creatorEmail.rows.length > 0) {
         await db.query(
           "UPDATE volunteers SET coordinator_email = $1 WHERE id = $2",
@@ -1165,9 +1122,6 @@ app.post("/api/volunteer/update-status", isAuthenticated, async (req, res) => {
         );
       }
     }
-
-    // Kirim notifikasi email ke volunteer (implementasi opsional)
-    // sendVolunteerStatusNotification(volunteer.rows[0].email, status, event.rows[0].event_name);
 
     res.json({
       success: true,
@@ -1182,7 +1136,6 @@ app.post("/api/volunteer/update-status", isAuthenticated, async (req, res) => {
   }
 });
 
-// Endpoint untuk mendapatkan daftar event yang dibuat oleh user
 app.get("/my-events-volunteers", isAuthenticated, async (req, res) => {
   const userId = req.session.userId;
 
@@ -1229,12 +1182,10 @@ app.get("/my-events", isAuthenticated, async (req, res) => {
   }
 });
 
-//balance page
 app.get("/balance", isAuthenticated, async (req, res) => {
   const userId = req.session.userId;
 
   try {
-    // Query 1: Get transaction list
     const transactionsResult = await db.query(
       `SELECT
          id AS transaction_id,
@@ -1248,7 +1199,6 @@ app.get("/balance", isAuthenticated, async (req, res) => {
       [userId]
     );
 
-    // Query 2: Get user balance
     const balanceResult = await db.query(
       `SELECT balance
        FROM users
@@ -1256,7 +1206,6 @@ app.get("/balance", isAuthenticated, async (req, res) => {
       [userId]
     );
 
-    // Check if user exists
     if (balanceResult.rows.length === 0) {
       return res.status(404).send("User not found");
     }
@@ -1276,9 +1225,7 @@ app.get("/balance", isAuthenticated, async (req, res) => {
   }
 });
 
-//top up balance
 app.post("/top-up", isAuthenticated, async (req, res) => {
-  // Explicit check for authenticated user
   if (!req.session || !req.session.userId) {
     return res.status(401).json({
       success: false,
@@ -1288,7 +1235,6 @@ app.post("/top-up", isAuthenticated, async (req, res) => {
 
   const { topUpAmount } = req.body;
 
-  // Validate topUpAmount
   if (!topUpAmount || topUpAmount <= 0) {
     return res.status(400).json({
       success: false,
@@ -1297,10 +1243,8 @@ app.post("/top-up", isAuthenticated, async (req, res) => {
   }
 
   try {
-    // Start a transaction
     await db.query("BEGIN");
 
-    // Insert transaction for top-up
     await db.query(
       `INSERT INTO user_transactions (
         user_id,
@@ -1312,7 +1256,6 @@ app.post("/top-up", isAuthenticated, async (req, res) => {
       [req.session.userId, "TOP_UP", topUpAmount, "Top-up via bank transfer"]
     );
 
-    // Update user balance
     const result = await db.query(
       `UPDATE users 
        SET balance = COALESCE(balance, 0) + $1 
@@ -1348,9 +1291,7 @@ app.post("/top-up", isAuthenticated, async (req, res) => {
   }
 });
 
-//withdraw balance
 app.post("/withdraw", isAuthenticated, async (req, res) => {
-  // Explicit check for authenticated user
   if (!req.session || !req.session.userId) {
     return res.status(401).json({
       success: false,
@@ -1360,7 +1301,6 @@ app.post("/withdraw", isAuthenticated, async (req, res) => {
 
   const { withdrawalAmount } = req.body;
 
-  // Validate withdrawalAmount
   if (!withdrawalAmount || withdrawalAmount <= 0) {
     return res.status(400).json({
       success: false,
@@ -1369,10 +1309,8 @@ app.post("/withdraw", isAuthenticated, async (req, res) => {
   }
 
   try {
-    // Start a transaction
     await db.query("BEGIN");
 
-    // Check if user has sufficient balance
     const balanceResult = await db.query(
       "SELECT balance FROM users WHERE id = $1",
       [req.session.userId]
@@ -1396,7 +1334,6 @@ app.post("/withdraw", isAuthenticated, async (req, res) => {
       });
     }
 
-    // Insert transaction for withdrawal
     await db.query(
       `INSERT INTO user_transactions (
         user_id,
@@ -1413,7 +1350,6 @@ app.post("/withdraw", isAuthenticated, async (req, res) => {
       ]
     );
 
-    // Update user balance
     const result = await db.query(
       `UPDATE users 
        SET balance = COALESCE(balance, 0) - $1 
@@ -1594,8 +1530,6 @@ app.get('/badge', async (req, res) => {
 });
 
 
-
-// Menjalankan Server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });

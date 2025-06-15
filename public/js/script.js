@@ -14,12 +14,12 @@ if (close) {
   });
 }
 
-// Make sure these functions are defined in the global scope
 
-// Donation handling
+
+
 let currentEventId = null;
 
-// Donation Modal Functions
+
 function openModal(eventId) {
   currentEventId = eventId;
   const donationModal = document.getElementById('donationModal');
@@ -29,7 +29,7 @@ function openModal(eventId) {
 
 function closeModal() {
   document.getElementById('donationModal').style.display = 'none';
-  // Reset donation amount field
+  
   document.getElementById('donationAmount').value = '';
 }
 
@@ -43,7 +43,7 @@ function confirmDonation() {
     return;
   }
   
-  // Send donation to server
+  
   fetch('/donate', {
     method: 'POST',
     headers: {
@@ -58,14 +58,14 @@ function confirmDonation() {
   .then(response => response.json())
   .then(data => {
     if (data.success) {
-      // Update UI with new donation amount
+      
       const container = document.querySelector(`.container-1[data-event-id="${eventId}"]`);
       if (container) {
         const raisedElement = container.querySelector('.raised-amount');
         if (raisedElement) {
           raisedElement.textContent = data.raised_money;
           
-          // Update progress bar
+         
           const goalAmount = parseFloat(container.querySelector('.goal-amount').textContent);
           const progressBar = container.querySelector('.progress-bar');
           if (progressBar) {
@@ -74,7 +74,7 @@ function confirmDonation() {
         }
       }
       
-      // Close modal and show success message
+      
       closeModal();
       alert('Thank you for your donation!');
     } else {
@@ -87,7 +87,7 @@ function confirmDonation() {
   });
 }
 
-// Make sure modal closes when clicking outside
+
 window.onclick = function(event) {
   const modal = document.getElementById('donationModal');
   if (event.target == modal) {
@@ -100,7 +100,7 @@ window.onclick = function(event) {
   }
 };
 
-// volunteer create
+
 document.getElementById('volunteer_needed').addEventListener('change', function() {
   const volunteerDetails = document.getElementById('volunteer-details');
   volunteerDetails.style.display = this.checked ? 'block' : 'none';
@@ -112,10 +112,10 @@ document.getElementById('volunteer_needed').addEventListener('change', function(
 });
 
 
-// volunteer index
-// Initialize volunteer count display on page load
+
+
 document.addEventListener('DOMContentLoaded', function() {
-  // For each volunteer button, check the count
+  
   document.querySelectorAll('[id^="volunteer-btn-"]').forEach(btn => {
     const eventId = btn.dataset.eventId;
     updateVolunteerCountDisplay(eventId);
@@ -129,7 +129,7 @@ function openVolunteerModal(eventId) {
   volunteerEventId = eventId;
   document.getElementById('volunteerEventId').value = eventId;
   
-  // Pre-fill form with user data if available
+  
   <% if (user) { %>
     document.getElementById('volunteerName').value = "<%= user.name %>";
     document.getElementById('volunteerEmail').value = "<%= user.email %>";
@@ -143,7 +143,7 @@ function closeVolunteerModal() {
   document.getElementById('volunteerForm').reset();
 }
 
-// Load volunteer counts on page load
+
 document.addEventListener("DOMContentLoaded", function () {
   const volunteerCountElements = document.querySelectorAll(
     '[id^="volunteer-count-"]'
@@ -152,14 +152,14 @@ document.addEventListener("DOMContentLoaded", function () {
   volunteerCountElements.forEach((element) => {
     const eventId = element.id.split("-").pop();
 
-    // Perbaiki URL endpoint
+    
     fetch(`/volunteer-count/${eventId}`)
       .then((response) => response.json())
       .then((data) => {
-        // Ubah untuk menggunakan properti yang sesuai dengan API
+        
         element.textContent = data.currentCount || 0;
 
-        // Check if event is full and update button
+        
         if (data.isFull) {
           const btn = document.getElementById(`volunteer-btn-${eventId}`);
           if (btn) {
@@ -200,10 +200,10 @@ async function submitVolunteerApplication() {
       alert('Your volunteer application has been submitted!');
       closeVolunteerModal();
       
-      // Update the volunteer count display
+      
       updateVolunteerCountDisplay(formData.eventId);
       
-      // Update button to show applied
+      
       const btn = document.getElementById(`volunteer-btn-${formData.eventId}`);
       btn.textContent = 'Application Submitted';
       btn.disabled = true;
@@ -217,7 +217,7 @@ async function submitVolunteerApplication() {
   }
 }
 
-// Fungsi untuk update hitungan volunteer
+
 function updateVolunteerCount(eventId) {
   const countElement = document.getElementById(`volunteer-count-${eventId}`);
   if (!countElement) return;
@@ -230,10 +230,10 @@ function updateVolunteerCount(eventId) {
       return response.json();
     })
     .then(data => {
-      // Pastikan format data sesuai
+      
       countElement.textContent = data.currentCount || 0;
       
-      // Update status button jika posisi sudah penuh
+      
       if (data.isFull) {
         const btn = document.getElementById(`volunteer-btn-${eventId}`);
         if (btn) {
@@ -249,9 +249,9 @@ function updateVolunteerCount(eventId) {
     });
 }
 
-// Panggil fungsi ini saat halaman dimuat
+
 document.addEventListener('DOMContentLoaded', function() {
-  // Ambil semua elemen dengan data-event-id
+  
   const eventElements = document.querySelectorAll('[data-event-id]');
   eventElements.forEach(element => {
     const eventId = element.getAttribute('data-event-id');
@@ -272,7 +272,7 @@ async function updateVolunteerCountDisplay(eventId) {
       countElement.textContent = data.currentCount;
     }
     
-    // If max volunteers reached, disable the button
+    
     if (data.isFull) {
       const btn = document.getElementById(`volunteer-btn-${eventId}`);
       if (btn) {
@@ -308,21 +308,21 @@ async function checkUserVolunteerStatus(eventId) {
   }
 }
 
-// tab history
+
 function openTab(evt, tabName) {
-  // Hide all tab content
+  
   const tabContents = document.getElementsByClassName("tab-content");
   for (let i = 0; i < tabContents.length; i++) {
     tabContents[i].classList.remove("active");
   }
   
-  // Remove active class from all tab buttons
+ 
   const tabButtons = document.getElementsByClassName("tab-button");
   for (let i = 0; i < tabButtons.length; i++) {
     tabButtons[i].classList.remove("active");
   }
   
-  // Show the selected tab content and add active class to the button
+  
   document.getElementById(tabName).classList.add("active");
   evt.currentTarget.classList.add("active");
 }

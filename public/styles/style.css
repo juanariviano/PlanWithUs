@@ -9,7 +9,7 @@ body {
   overflow-x: hidden;
 }
 
-/* NAVBAR */
+
 #header {
   display: flex;
   justify-content: space-between;
@@ -170,7 +170,6 @@ body {
   }
 }
 
-/* navbar untuk tampilan dekstop */
 /* #header {
   
   display: flex;
@@ -415,7 +414,6 @@ body {
   width: 100%;
 } */
 
-/* pop up */
 
 .modal {
   display: none;
@@ -620,7 +618,7 @@ input {
   align-self: flex-start;
 }
 
-/* Home */
+/* home */
 
 .first-card {
   background-color: #f7eed3;
@@ -825,9 +823,9 @@ footer img {
   gap: 5px;
 }
 
-/* event */
 
-/* pengaturan tulisan Create event */
+
+
 
 #header1 {
   color: #674636;
@@ -850,7 +848,7 @@ footer img {
   margin-bottom: 10px;
 }
 
-/* Pengaturan untuk pengisian form dan upload-an file */
+
 #form {
   width: 90%;
   max-width: 37.5rem;
@@ -1040,7 +1038,7 @@ footer img {
   margin: 0 auto;
 }
 
-/* Responsif tombol di empty state */
+
 .history-content.empty-state button {
   background-color: #4caf50;
   color: white;
@@ -1055,7 +1053,7 @@ footer img {
   background-color: #45a049;
 }
 
-/* Media Queries */
+
 @media screen and (max-width: 768px) {
   .history-content,
   .history-content.empty-state {
@@ -1173,7 +1171,6 @@ footer img {
 }
 
 /* profile */
-/* Profile Container */
 
 .profile-container {
   max-width: 500px;
@@ -1183,7 +1180,7 @@ footer img {
   font-family: "Quicksand", sans-serif;
 }
 
-/* Profile Header */
+
 
 .profile-header h1 {
   font-size: 24px;
@@ -1192,7 +1189,7 @@ footer img {
   color: #333;
 }
 
-/* Profile Info */
+
 
 .profile-info {
   padding: 0;
@@ -1220,7 +1217,7 @@ footer img {
   color: #555;
 }
 
-/* Edit Profile Button */
+
 .edit-profile-btn {
   background-color: #aab396;
   border: 0;
@@ -1233,7 +1230,7 @@ footer img {
   font-family: "Quicksand", sans-serif;
 }
 
-/* User Statistics */
+
 .user-statistics {
   margin-top: 25px;
 }
@@ -1319,7 +1316,7 @@ footer img {
   font-weight: normal;
 }
 
-/* Alert styling */
+
 .alert {
   padding: 10px;
   border-radius: 5px;
@@ -1336,7 +1333,7 @@ footer img {
   color: #721c24;
 }
 
-/* profile styling */
+
 /* .profile-dropdown {
   position: relative;
   display: inline-block;
@@ -1381,7 +1378,7 @@ footer img {
   }
 } */
 
-/* For mobile responsiveness */
+
 /* @media (max-width: 799px) {
   .dropdown-content {
     position: static;
@@ -1394,7 +1391,7 @@ footer img {
   }
 } */
 
-/* history tab */
+
 .history-tabs {
   display: flex;
   justify-content: center;
@@ -1466,7 +1463,7 @@ footer img {
   color: #dc3545;
 }
 
-/* toggle */
+
 
 .toggle-container {
   display: flex;
@@ -1532,7 +1529,7 @@ footer img {
   display: inline;
 }
 
-/* Styles for the volunteer management page */
+
 #management-header {
   text-align: left;
   padding: 2rem 0;
